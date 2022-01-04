@@ -36,8 +36,7 @@
 		"apache-arrow": "^6.0.1"
 	},
 	"dependencies": {
-		"@fontsource/fira-mono": "^4.5.0",
-		"@duckdb/duckdb-wasm": "1.12.1-dev17.0",
+		"@duckdb/duckdb-wasm": "1.12.1-dev64.0",
 		"svelte-simple-datatables": "^0.1.27"
 	},
 	"type": "module"

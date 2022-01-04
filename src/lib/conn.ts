@@ -26,13 +26,6 @@ const BASE_URL = 'https://f002.backblazeb2.com/file/boxball/transform/parquet/ba
 
 const TABLES = ['batting'];
 
-const dbMobileConfig = async (db: AsyncDuckDB): Promise<void> => {
-	const conn = await db.connect();
-	await conn.query("PRAGMA memory_limit='250MB'");
-	await conn.query("PRAGMA threads=1");
-	conn.close;
-}
-
 const getDB = async (): Promise<AsyncDuckDB> => {
 	const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
 	console.log("Using DuckDB bundle: ", bundle);
@@ -40,7 +33,6 @@ const getDB = async (): Promise<AsyncDuckDB> => {
 	const worker = new Worker(bundle.mainWorker);
 	const db = new duckdb.AsyncDuckDB(logger, worker);
 	await db.instantiate(bundle.mainModule);
-	await dbMobileConfig(db);
 	return db;
 };
 
