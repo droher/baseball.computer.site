@@ -7,6 +7,10 @@ import duckURL from '/shim/duckdb/duckdb-next.wasm?url';
 
 const BASE_URL = 'https://f002.backblazeb2.com/file/boxball/transform/parquet/baseballdatabank';
 
+// const TABLES = ['allstar_full', 'appearances', 'awards_managers', 'awards_players', 'awards_share_managers', 'awards_share_players', 'batting', 'batting_post', 'college_playing', 'fielding', 'fielding_of', 'fielding_of_split', 'fielding_post', 'hall_of_fame', 'home_games', 'managers', 'managers_half', 'parks', 'people', 'pitching', 'pitching_post', 'salaries', 'schools', 'series_post', 'teams', 'teams_franchises', 'teams_half'];
+
+const TABLES = ['batting'];
+
 const getDB = async (): Promise<AsyncDuckDB> => {
 	const logger = new duckdb.ConsoleLogger();
 	const worker = new DuckDBWorker();
@@ -19,10 +23,14 @@ const getTableFields = (table: Table<any>): Array<string> => {
 	return table.schema.fields.map((f) => f.name);
 };
 
-const addTable = async (conn: AsyncDuckDBConnection, table_name: string): Promise<void> => {
-	const full_uri = `${BASE_URL}/${table_name}.parquet`;
-	const ddl = `CREATE OR REPLACE view ${table_name} AS  (SELECT * FROM "${full_uri}")`;
-	conn.query(ddl);
+const TABLE_DDL: Array<string> =
+	TABLES.map((t) => [t, `${BASE_URL}/${t}.parquet`])
+		.map((info) => `CREATE TABLE ${info[0]} AS SELECT * FROM "${info[1]}"`);
+
+const addTables = async (conn: AsyncDuckDBConnection): Promise<void> => {
+	const exec = TABLE_DDL.map((ddl) => conn.query(ddl))
+	await Promise.all(exec);
+	return;
 };
 
-export { addTable, getDB, getTableFields };
+export { addTables, getDB, getTableFields };

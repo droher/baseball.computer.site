@@ -8,12 +8,14 @@
 	let rows;
 
 	const settings = {
+		blocks: {
+			searchInput: false
+		},
 		sortable: true,
 		pagination: true,
 		rowsPerPage: 50,
 		columnFilter: true
 	};
-	console.log(data);
 </script>
 
 <Datatable {settings} {data} bind:dataRows={rows}>
