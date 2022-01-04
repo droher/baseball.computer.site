@@ -4,16 +4,20 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/env';
 
-	let db;
-	let conn;
-	let mounted = new Promise((resolve) => {});
+	var conn;
+	var db;
+	var dbLoaded = false;
+	
 	let result = new Promise((resolve) => {});
 
 	let query_string = `SELECT * FROM batting LIMIT 100`;
 
 	async function query(q: string) {
 		if (browser) {
-			await mounted;
+			while (!dbLoaded) {
+				console.log("Not loaded yet")
+				setTimeout(() => {}, 1000)
+			}
 			result = await conn.query(q);
 		}
 	}
@@ -22,7 +26,7 @@
 		db = await getDB();
 		conn = await db.connect();
 		await addTables(conn);
-		mounted = Promise.resolve(0);
+		dbLoaded = true;
 	});
 
 	onDestroy(async () => {
@@ -34,10 +38,10 @@
 </script>
 
 <textarea bind:value={query_string} />
-<p></p>
+<p />
 <button class="bg-white text-black border-l-2" on:click={() => query(query_string)}>Submit</button>
 
-<div class="flex-grow" >
+<div class="flex-grow">
 	{#await result then data}
 		<PrettyTable fields={getTableFields(data)} data={data.toArray()} />
 	{/await}

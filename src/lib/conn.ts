@@ -2,8 +2,23 @@ import type { AsyncDuckDB, AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { Table } from 'apache-arrow';
 
 import * as duckdb from '@duckdb/duckdb-wasm';
-import DuckDBWorker from '/shim/duckdb/duckdb-browser-next.worker?worker';
-import duckURL from '/shim/duckdb/duckdb-next.wasm?url';
+
+import duckDBWorker from '/shim/duckdb/duckdb-browser.worker?url';
+import duckDBWasm from '/shim/duckdb/duckdb.wasm?url';
+import duckDBWorkerNext from '/shim/duckdb/duckdb-browser-next.worker?url';
+import duckDBWasmNext from '/shim/duckdb/duckdb-next.wasm?url';
+
+
+const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
+	mvp: {
+		mainModule: duckDBWasm,
+		mainWorker: duckDBWorker,
+	},
+	next: {
+		mainModule: duckDBWasmNext,
+		mainWorker: duckDBWorkerNext
+	}
+}
 
 const BASE_URL = 'https://f002.backblazeb2.com/file/boxball/transform/parquet/baseballdatabank';
 
@@ -11,11 +26,21 @@ const BASE_URL = 'https://f002.backblazeb2.com/file/boxball/transform/parquet/ba
 
 const TABLES = ['batting'];
 
+const dbMobileConfig = async (db: AsyncDuckDB): Promise<void> => {
+	const conn = await db.connect();
+	await conn.query("PRAGMA memory_limit='250MB'");
+	await conn.query("PRAGMA threads=1");
+	conn.close;
+}
+
 const getDB = async (): Promise<AsyncDuckDB> => {
+	const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
+	console.log("Using DuckDB bundle: ", bundle);
 	const logger = new duckdb.ConsoleLogger();
-	const worker = new DuckDBWorker();
+	const worker = new Worker(bundle.mainWorker);
 	const db = new duckdb.AsyncDuckDB(logger, worker);
-	await db.instantiate(duckURL);
+	await db.instantiate(bundle.mainModule);
+	await dbMobileConfig(db);
 	return db;
 };
 
