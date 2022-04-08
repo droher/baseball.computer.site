@@ -3,20 +3,27 @@ import type { Table } from 'apache-arrow';
 
 import * as duckdb from '@duckdb/duckdb-wasm';
 
-import duckDBWorker from '/shim/duckdb/duckdb-browser.worker?url';
-import duckDBWasm from '/shim/duckdb/duckdb.wasm?url';
-import duckDBWorkerNext from '/shim/duckdb/duckdb-browser-next.worker?url';
-import duckDBWasmNext from '/shim/duckdb/duckdb-next.wasm?url';
-
+import duckDBWorker from "/shim/duckdb/duckdb-browser-mvp.worker?url"
+import duckDBWasm from '/shim/duckdb/duckdb-mvp.wasm?url';
+import duckDBWorkerEh from '/shim/duckdb/duckdb-browser-eh.worker?url';
+import duckDBWasmEh from '/shim/duckdb/duckdb-eh.wasm?url';
+import duckDBWorkerCoi from '/shim/duckdb/duckdb-browser-coi.worker?url';
+import duckDBWasmCoi from '/shim/duckdb/duckdb-coi.wasm?url';
+import duckDBThreadWorkerCoi from '/shim/duckdb/duckdb-browser-coi.pthread.worker?url';
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 	mvp: {
 		mainModule: duckDBWasm,
 		mainWorker: duckDBWorker,
 	},
-	next: {
-		mainModule: duckDBWasmNext,
-		mainWorker: duckDBWorkerNext
+	eh: {
+		mainModule: duckDBWasmEh,
+		mainWorker: duckDBWorkerEh
+	},
+	coi: {
+		mainModule: duckDBWasmCoi,
+		mainWorker: duckDBWorkerCoi,
+		pthreadWorker: duckDBThreadWorkerCoi
 	}
 }
 
