@@ -1,48 +1,39 @@
 <script lang="ts">
 	import PrettyTable from '$lib/PrettyTable.svelte';
-	import { addTables, getDB, getTableFields } from './conn';
-	import { onMount, onDestroy } from 'svelte';
+	import { getBoxballFiles } from './boxball-files';
+	import { DbContextManager, getTableFields } from './db';
+	import { db } from './stores';
+	import { onMount } from 'svelte';
 	import { browser } from '$app/env';
+	import type { Table } from 'apache-arrow';
 
-	var conn;
-	var db;
-	var dbLoaded = false;
-	
-	let result = new Promise((resolve) => {});
+	let result: Promise<Table> = new Promise((resolve) => {});
 
 	let query_string = `SELECT * FROM batting LIMIT 100`;
 
-	async function query(q: string) {
-		if (browser) {
-			while (!dbLoaded) {
-				console.log("Not loaded yet")
-				setTimeout(() => {}, 1000)
-			}
-			result = await conn.query(q);
+	const query = () => {
+		if (browser && typeof $db !== 'undefined') {
+			result = $db.conn.query(query_string);
 		}
-	}
+	};
 
 	onMount(async () => {
-		db = await getDB();
-		conn = await db.connect();
-		await addTables(conn);
-		dbLoaded = true;
-	});
-
-	onDestroy(async () => {
-		if (browser) {
-			await conn.close();
-			await db.terminate();
+		if (typeof $db === 'undefined') {
+			$db = await DbContextManager.init(getBoxballFiles());
 		}
 	});
 </script>
 
 <textarea bind:value={query_string} />
 <p />
-<button class="bg-white text-black border-l-2" on:click={() => query(query_string)}>Submit</button>
+{#if typeof $db !== 'undefined'}
+	<button class="bg-white text-black border-l-2" on:click={() => query()}>Submit</button>
+{/if}
 
 <div class="flex-grow">
 	{#await result then data}
-		<PrettyTable fields={getTableFields(data)} data={data.toArray()} />
+		{#key data}
+			<PrettyTable fields={getTableFields(data)} data={data.toArray()} />
+		{/key}
 	{/await}
 </div>
