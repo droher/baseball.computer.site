@@ -3,18 +3,18 @@ import type { AsyncDuckDB, AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 
 import * as duckdb from '@duckdb/duckdb-wasm';
 
-import duckDBWorker from '/shim/duckdb/duckdb-browser-mvp.worker?url';
-import duckDBWasm from '/shim/duckdb/duckdb-mvp.wasm?url';
-import duckDBWorkerEh from '/shim/duckdb/duckdb-browser-eh.worker?url';
-import duckDBWasmEh from '/shim/duckdb/duckdb-eh.wasm?url';
-import duckDBWorkerCoi from '/shim/duckdb/duckdb-browser-coi.worker?url';
-import duckDBWasmCoi from '/shim/duckdb/duckdb-coi.wasm?url';
-import duckDBThreadWorkerCoi from '/shim/duckdb/duckdb-browser-coi.pthread.worker?url';
+import duckDBWorker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url';
+import duckDBWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
+import duckDBWorkerEh from '@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url';
+import duckDBWasmEh from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url';
+import duckDBWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.worker.js?url';
+import duckDBWasmCoi from '@duckdb/duckdb-wasm/dist/duckdb-coi.wasm?url';
+import duckDBThreadWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.pthread.worker.js?url';
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 	mvp: {
 		mainModule: duckDBWasm,
-		mainWorker: duckDBWorker
+		mainWorker: duckDBWorker,
 	},
 	eh: {
 		mainModule: duckDBWasmEh,
@@ -33,7 +33,8 @@ const getDB = async (): Promise<AsyncDuckDB> => {
 	const logger = new duckdb.ConsoleLogger();
 	const worker = new Worker(bundle.mainWorker);
 	const db = new duckdb.AsyncDuckDB(logger, worker);
-	await db.instantiate(bundle.mainModule);
+    console.log(bundle.pthreadWorker)
+	await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
 	return db;
 };
@@ -70,7 +71,11 @@ class DbContextManager {
 		const conn = await db.connect();
         
         console.log("Registering views...")
-		const exec = views.map((t) => conn.query(addViewDDL(t)))
+		const exec = views.map(async (t) => {
+            const temp_conn = await db.connect();
+            temp_conn.query(addViewDDL(t))
+            temp_conn.close()
+        })
         await Promise.all(exec);
 
         console.log("DB is ready for queries.")

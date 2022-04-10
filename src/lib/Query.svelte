@@ -18,6 +18,7 @@
 	};
 
 	onMount(async () => {
+		const headers = new Headers()
 		if (typeof $db === 'undefined') {
 			$db = await DbContextManager.init(getBoxballFiles());
 		}
