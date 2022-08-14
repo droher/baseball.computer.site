@@ -11,6 +11,9 @@ import duckDBWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.worker.
 import duckDBWasmCoi from '@duckdb/duckdb-wasm/dist/duckdb-coi.wasm?url';
 import duckDBThreadWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.pthread.worker.js?url';
 
+import Worker from 'web-worker';
+
+
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 	mvp: {
 		mainModule: duckDBWasm,
@@ -43,7 +46,7 @@ const addViewDDL = (table: RemoteParquetFile): string => {
 	return `
     CREATE VIEW ${table.table_name} AS (
         SELECT * 
-        FROM '${table.base_url}/${table.table_name}.parquet'
+        FROM '${table.table_name}.parquet'
     );`;
 };
 
@@ -73,8 +76,9 @@ class DbContextManager {
         console.log("Registering views...")
 		const exec = views.map(async (t) => {
             const temp_conn = await db.connect();
-            temp_conn.query(addViewDDL(t))
-            temp_conn.close()
+			await db.registerFileURL(`${t.table_name}.parquet`, `${t.base_url}/${t.table_name}.parquet`);
+            temp_conn.query(addViewDDL(t));
+            temp_conn.close();
         })
         await Promise.all(exec);
 
