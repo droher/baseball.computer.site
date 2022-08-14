@@ -43,7 +43,7 @@ const addViewDDL = (table: RemoteParquetFile): string => {
 	return `
     CREATE VIEW ${table.table_name} AS (
         SELECT * 
-        FROM '${table.table_name}.parquet'
+        FROM '${table.base_url}/${table.table_name}.parquet'
     );`;
 };
 
@@ -71,13 +71,9 @@ class DbContextManager {
 		const conn = await db.connect();
 
 		console.log('Registering views...');
-		const exec = views.map(async (t) => {
-			const temp_conn = await db.connect();
-			await db.registerFileURL(`${t.table_name}.parquet`, `${t.base_url}/${t.table_name}.parquet`);
-			temp_conn.query(addViewDDL(t));
-			temp_conn.close();
-		});
-		await Promise.all(exec);
+		const ddl = views.map((table) => addViewDDL(table)).join('\n');
+		console.log(ddl);
+		await conn.query(ddl);
 
 		console.log('DB is ready for queries.');
 		return new DbContextManager(db, conn);
