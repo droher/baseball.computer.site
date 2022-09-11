@@ -4,7 +4,7 @@
 	import { DbContextManager, getTableFields } from './db';
 	import { db } from './stores';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import type { Table } from 'apache-arrow';
 
 	let result: Promise<Table> = new Promise((resolve) => {});
