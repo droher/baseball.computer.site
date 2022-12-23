@@ -22,6 +22,7 @@ LIMIT 100
 	};
 
 	$: is_db_loaded = typeof $db !== 'undefined';
+	$: btn_text = is_db_loaded ? 'Submit' : 'Loading...';
 
 	onMount(async () => {
 		const headers = new Headers()
@@ -33,7 +34,7 @@ LIMIT 100
 
 <section>
 	<CodeMirror bind:value={query_string}/>
-	<button disabled={!is_db_loaded} class="btn btn-primary btn-lg" on:click={() => query()}>Submit</button>
+	<button disabled={!is_db_loaded} class="btn btn-primary btn-lg" on:click={() => query()}>{btn_text}</button>
 
 	
 	<div class="flex grow">
