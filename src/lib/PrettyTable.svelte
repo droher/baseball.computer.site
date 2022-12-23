@@ -1,28 +1,27 @@
 <script lang="ts">
-	import type { Table } from 'apache-arrow';
-	import { DataHandler, Th} from '@vincjo/datatables';
+	import type { StructRow, Table } from 'apache-arrow';
 	import { getTableFields } from './db';
 
 	export let arrow_table: Table;
 
 	const fields = getTableFields(arrow_table);
-	const data: Object[] = arrow_table.toArray();
+	const data = arrow_table.toArray().map(
+		(row: StructRow) => row.toJSON()
+	);
 
-	const handler = new DataHandler(data);
-	const rows = handler.getRows();
 </script>
 
 <table class="table table-zebra table-compact">
 	<thead>
 		<tr>
 			{#each fields as field}
-				<Th {handler}>{field}</Th>
+				<th>{field}</th>
 			{/each}
 		</tr>
 	</thead>
 	<tbody>
-		{#if rows}
-			{#each $rows as row}
+		{#if data}
+			{#each data as row}
 				<tr>
 					{#each fields as field}
 						<td>{row[field]}</td>
