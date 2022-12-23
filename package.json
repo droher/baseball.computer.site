@@ -14,8 +14,8 @@
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
-		"@playwright/test": "^1.28.1",
-		"@sveltejs/adapter-auto": "^1.0.0",
+		"@playwright/test": "^1.29.1",
+		"@sveltejs/adapter-vercel": "^1.0.0",
 		"@sveltejs/kit": "^1.0.1",
 		"@types/cookie": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
@@ -46,7 +46,7 @@
 		"@codemirror/lang-sql": "6.3.3",
 		"svelte-codemirror-editor": "^1.1.0",
 		"@duckdb/duckdb-wasm": "^1.20.0",
-		"@vincjo/datatables": "0.9.93"
+		"@vincjo/datatables": "0.9.94"
 	},
 	"type": "module"
 }
