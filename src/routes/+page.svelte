@@ -1,5 +1,10 @@
 <script>
 	import Query from '$lib/Query.svelte';
 </script>
-<h1>Baseball SQL</h1>
+
+<svelte:head>
+	<title>Home</title>
+	<meta name="description" content="Baseball SQL" />
+</svelte:head>
+
 <Query />

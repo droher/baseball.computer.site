@@ -1,38 +1,34 @@
-<script>
+<script lang="ts">
+	import type { Table } from 'apache-arrow';
+	import { DataHandler, Th} from '@vincjo/datatables';
+	import { getTableFields } from './db';
 
-	import { Datatable } from 'svelte-simple-datatables';
+	export let arrow_table: Table;
 
-	export let data;
-    export let fields;
+	const fields = getTableFields(arrow_table);
+	const data: Object[] = arrow_table.toArray();
 
-	let rows;
-
-	const settings = {
-		blocks: {
-			searchInput: false
-		},
-		sortable: true,
-		pagination: true,
-		rowsPerPage: 50,
-		columnFilter: true
-	};
+	const handler = new DataHandler(data);
+	const rows = handler.getRows();
 </script>
 
-<Datatable {settings} {data} bind:dataRows={rows}>
+<table class="table table-zebra table-compact">
 	<thead>
-        {#each fields as field}
-		<th data-key='{field}'>{field}</th>
-        {/each}
+		<tr>
+			{#each fields as field}
+				<Th {handler}>{field}</Th>
+			{/each}
+		</tr>
 	</thead>
 	<tbody>
 		{#if rows}
 			{#each $rows as row}
-                    <tr>
-                    {#each fields as field}
-                        <td>{row[field]}</td>
-                    {/each}
-                    </tr>
+				<tr>
+					{#each fields as field}
+						<td>{row[field]}</td>
+					{/each}
+				</tr>
 			{/each}
 		{/if}
 	</tbody>
-</Datatable>
+</table>

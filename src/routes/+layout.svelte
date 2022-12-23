@@ -1,7 +1,11 @@
 <script>
-	import '../app.css';
-	import Nav from '$lib/Nav.svelte';
+	import "../app.postcss";
+	import "./styles.css";
 </script>
 
-<Nav />
-<slot />
+<div class="app h-screen" data-theme="cupcake">
+	<main class="flex flex-col">
+		<slot></slot>
+	</main>
+
+</div>

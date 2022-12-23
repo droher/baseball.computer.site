@@ -6,9 +6,10 @@ import duckDBWorker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?
 import duckDBWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
 import duckDBWorkerEh from '@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url';
 import duckDBWasmEh from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url';
-import duckDBWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.worker.js?url';
-import duckDBWasmCoi from '@duckdb/duckdb-wasm/dist/duckdb-coi.wasm?url';
-import duckDBThreadWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.pthread.worker.js?url';
+// TODO: enable this when we have a working version of the COI bundle
+// import duckDBWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.worker.js?url';
+// import duckDBWasmCoi from '@duckdb/duckdb-wasm/dist/duckdb-coi.wasm?url';
+// import duckDBThreadWorkerCoi from '@duckdb/duckdb-wasm/dist/duckdb-browser-coi.pthread.worker.js?url';
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 	mvp: {
@@ -18,7 +19,7 @@ const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 	eh: {
 		mainModule: duckDBWasmEh,
 		mainWorker: duckDBWorkerEh
-	},
+	}
 	// TODO: enable this when we have a working version of the COI bundle
 	// https://github.com/duckdb/duckdb-wasm/issues/939
 	// coi: {
@@ -35,7 +36,6 @@ const getDB = async (): Promise<AsyncDuckDB> => {
 	const worker = new Worker(bundle.mainWorker);
 	const db = new duckdb.AsyncDuckDB(logger, worker);
 	await db.instantiate(bundle.mainModule);
-	console.log(db);
 	return db;
 };
 
@@ -60,7 +60,7 @@ class DbContextManager {
 	conn: AsyncDuckDBConnection;
 	private db: AsyncDuckDB;
 
-	private constructor(db, conn) {
+	private constructor(db: AsyncDuckDB, conn: AsyncDuckDBConnection) {
 		this.db = db;
 		this.conn = conn;
 	}
@@ -68,6 +68,7 @@ class DbContextManager {
 	static async init(views: RemoteParquetFile[] = []): Promise<DbContextManager> {
 		console.log('Initializing DB...');
 		const db = await getDB();
+
 		const conn = await db.connect();
 
 		console.log('Registering views...');
