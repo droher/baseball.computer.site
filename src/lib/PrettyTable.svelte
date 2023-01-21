@@ -4,6 +4,7 @@
 
 	export let arrow_table: Table;
 
+	// convert arrow table to JSON
 	const fields = getTableFields(arrow_table);
 	const data = arrow_table.toArray().map(
 		(row: StructRow) => row.toJSON()
