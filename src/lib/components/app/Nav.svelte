@@ -1,0 +1,22 @@
+<script>
+	import ThemeSwitcher from './ThemeSwitcher.svelte';
+</script>
+
+<div class="navbar bg-base-200">
+	<div class="flex-1">
+		<a class="btn-ghost btn gap-2 text-xl normal-case" href="/">
+			<span class="sm:hidden">T</span>
+			<span class="hidden sm:block">Timeball</span>
+		</a>
+	</div>
+	<div class="flex-auto space-x-2">
+		<a class="btn btn-info" href="/query-engine">Query Engine</a>
+		<button class="btn btn-info">Database Documentation</button>
+		<button class="btn btn-info">Blog</button>
+		<button class="btn btn-info">About</button>
+	</div>
+	<!-- theme switcher -->
+	<div class="mr-2 flex-none">
+		<ThemeSwitcher />
+	</div>
+</div>

@@ -1,4 +1,4 @@
-import type { Table } from 'apache-arrow';
+import type { RecordBatch, Table } from 'apache-arrow';
 import type { AsyncDuckDB, AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import * as duckdb from '@duckdb/duckdb-wasm';
 
@@ -31,20 +31,12 @@ const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 
 const getDB = async (): Promise<AsyncDuckDB> => {
 	const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
-	console.log('Using DuckDB bundle: ', bundle);
-	const logger = new duckdb.ConsoleLogger();
-	const worker = new Worker(bundle.mainWorker);
+	console.debug('Using DuckDB bundle: ', bundle);
+	const logger = new duckdb.ConsoleLogger(duckdb.LogLevel.INFO);
+	const worker = new Worker(String(bundle.mainWorker));
 	const db = new duckdb.AsyncDuckDB(logger, worker);
 	await db.instantiate(bundle.mainModule);
 	return db;
-};
-
-const addViewDDL = (table: RemoteParquetFile): string => {
-	return `
-    CREATE VIEW ${table.table_name} AS (
-        SELECT * 
-        FROM '${table.base_url}/${table.table_name}.parquet'
-    );`;
 };
 
 const getTableFields = (table: Table<any>): Array<string> => {
@@ -65,24 +57,33 @@ class DbContextManager {
 		this.conn = conn;
 	}
 
-	static async init(views: RemoteParquetFile[] = []): Promise<DbContextManager> {
-		console.log('Initializing DB...');
+	static async init(): Promise<DbContextManager> {
+		console.debug('Initializing DB...');
 		const db = await getDB();
 
 		const conn = await db.connect();
+		await conn.query(`ATTACH 'https://www.baseball.computer/dbt/timeball_remote.db' (READ_ONLY)`);
+		await conn.query(`USE timeball_remote`);
+		await conn.query(`SET SCHEMA=main_models`);
 
-		console.log('Registering views...');
-		const ddl = views.map((table) => addViewDDL(table)).join('\n');
-		console.log(ddl);
-		await conn.query(ddl);
-
-		console.log('DB is ready for queries.');
+		console.debug('DB is ready for queries.');
 		return new DbContextManager(db, conn);
 	}
 
 	async close() {
+		await this.conn.query(`DETACH timeball_remote`);
 		await this.conn.close();
 		await this.db.terminate();
+	}
+
+	async *getBatches(query: string): AsyncGenerator<{batch: RecordBatch, done: boolean}> {
+		const reader = await this.conn.send(query);
+		let iter = await reader.next();
+		while (!iter.done) {
+			const batch = iter.value;
+			iter = await reader.next();
+			yield {batch: batch, done: Boolean(iter.done)};
+		}
 	}
 }
 

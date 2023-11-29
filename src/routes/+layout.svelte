@@ -1,11 +1,11 @@
 <script>
-	import "../app.postcss";
-	import "./styles.css";
+	import '../app.postcss';
+	import Navbar from '$lib/components/app/Nav.svelte';
+	import Footer from '$lib/components/app/Footer.svelte';
 </script>
 
-<div class="app h-screen" data-theme="cupcake">
-	<main class="flex flex-col">
-		<slot></slot>
-	</main>
-
+<div class="flex flex-col min-h-screen bg-base-200">
+	<Navbar />
+	<slot />
 </div>
+<Footer />
