@@ -7,13 +7,21 @@
 	import { DbContextManager } from "$lib/io/db";
 	import { Table, tableToIPC } from "apache-arrow";
 
+    export let query: string;
+
+    let db: DbContextManager;
     let viewer1: IPerspectiveViewerElement;
+    let worker: PerspectiveWorker;
     // Hack that seems to prevent malformed view from rendering
     let datagrid: typeof import("@finos/perspective-viewer-datagrid");
 
-    let db: DbContextManager;
+    $: {
+        if (typeof query !== 'undefined') {
+            getTable();
+        }
+    }
 
-    const getTable = async (worker: PerspectiveWorker, query: string) => {
+    const getTable = async () => {
         let pTable;
         let batch_buffer = [];
 
@@ -35,21 +43,13 @@
         return pTable;
     };
 
-    // Async funtion to load the table
-    const loadTable = async () => {
+    onMount(async () => {
         await import ("@finos/perspective-viewer");
         await import ("@finos/perspective-viewer-d3fc");
         datagrid = await import ("@finos/perspective-viewer-datagrid");
         db = await DbContextManager.init();
     
-        const worker = perspective.shared_worker();
-        const query = "SELECT * FROM player_game_offense_lines LIMIT 5000"
-        await getTable(worker, query);
-
-    };
-
-    onMount(() => {
-        loadTable();
+        worker = perspective.shared_worker();   
     });
 
     onDestroy(async () => {

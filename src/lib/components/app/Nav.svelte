@@ -14,9 +14,6 @@
 		<button class="btn btn-info">Database Documentation</button>
 		<button class="btn btn-info">Blog</button>
 		<button class="btn btn-info">About</button>
-	</div>
-	<!-- theme switcher -->
-	<div class="mr-2 flex-none">
 		<ThemeSwitcher />
 	</div>
 </div>

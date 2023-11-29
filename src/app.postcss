@@ -1,4 +1,12 @@
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
-@tailwind utilities
+@tailwind utilities;
+@layer base {
+	@font-face {
+		font-family: 'Special Elite';
+		src: url('/fonts/special-elite/SpecialElite.ttf');
+		font-weight: normal;
+		font-display: swap;
+	}
+};

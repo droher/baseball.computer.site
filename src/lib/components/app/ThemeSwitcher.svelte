@@ -15,7 +15,7 @@
 
 </script>
 
-<select data-choose-theme class="select-bordered select-primary select w-full max-w-3xl text-lg">
+<select data-choose-theme class="select-bordered select-primary select">
 	<option disabled selected>Set Theme 🎨</option>
 	{#each theme_list as theme}
 		<option value={theme}>{capitalizeFirstLetter(theme)}</option>
