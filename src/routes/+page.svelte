@@ -3,7 +3,7 @@
 </script>
 
 <div
-  class="flex items-center justify-center  text-center xl:justify-start xl:pe-0 xl:ps-10 xl:text-start"
+  class="flex items-center justify-center text-center xl:justify-start xl:pe-0 xl:ps-10 xl:text-start"
 >
   <div class="flex flex-col items-center gap-6 xl:flex-row">
     <div class="h-1"></div>

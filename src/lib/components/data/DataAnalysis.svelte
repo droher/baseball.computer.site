@@ -7,6 +7,8 @@
 	import { DbContextManager } from "$lib/io/db";
 	import { Table, tableToIPC } from "apache-arrow";
 
+    import { QueryStatus, queryStatus } from "$lib/stores";
+
     export let query: string;
 
     let db: DbContextManager;
@@ -25,6 +27,7 @@
         let pTable;
         let batch_buffer = [];
 
+        queryStatus.set(QueryStatus.Running);
         for await (const {batch, done} of db.getBatches(query)) {
             batch_buffer.push(batch);
             if(batch_buffer.length >= 10 || done) {
@@ -39,6 +42,8 @@
                 }
             }
         }
+        queryStatus.set(QueryStatus.Success);
+        queryStatus.set(QueryStatus.Idle);
 
         return pTable;
     };
