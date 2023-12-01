@@ -6,8 +6,6 @@
   import ArticleTitle from "$lib/components/blog/ArticleTitle.svelte";
   import ArticleMeta from "$lib/components/blog/ArticleMeta.svelte";
 
-  export const prerender = true;
-
   export let data: PageData;
 
   type C = $$Generic<typeof SvelteComponent<any, any, any>>;

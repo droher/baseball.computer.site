@@ -1,17 +1,20 @@
 <script lang="ts">
+  import '@fontsource/roboto-mono';
+  import "@finos/perspective-viewer/dist/css/pro.css";
+  import "@finos/perspective-viewer/dist/css/pro-dark.css";
+  
   import { onDestroy, onMount } from "svelte";
   import perspective, { type PerspectiveWorker } from "@finos/perspective";
-  import "@finos/perspective-viewer/dist/css/themes.css";
 
   import type { IPerspectiveViewerElement } from "@finos/perspective-viewer";
   import { DbContextManager } from "$lib/io/db";
   import { Table, tableToIPC } from "apache-arrow";
 
-  import { QueryStatus, queryStatus } from "$lib/stores";
+  import { QueryStatus, queryStatus, db } from "$lib/stores";
+  
 
   export let query: string;
-
-  let db: DbContextManager;
+  
   let viewer1: IPerspectiveViewerElement;
   let worker: PerspectiveWorker;
   // Hack that seems to prevent malformed view from rendering
@@ -26,9 +29,10 @@
   const getTable = async () => {
     let pTable;
     let batch_buffer = [];
-
+    const conn = $db ?? (() => { throw new Error("No database connection"); })();
     queryStatus.set(QueryStatus.Running);
-    for await (const { batch, done } of db.getBatches(query)) {
+
+    for await (const { batch, done } of conn.getBatches(query)) {
       batch_buffer.push(batch);
       if (batch_buffer.length >= 10 || done) {
         var arrowTable = new Table(batch_buffer);
@@ -52,16 +56,10 @@
     await import("@finos/perspective-viewer");
     await import("@finos/perspective-viewer-d3fc");
     datagrid = await import("@finos/perspective-viewer-datagrid");
-    db = await DbContextManager.init();
 
     worker = perspective.shared_worker();
   });
 
-  onDestroy(async () => {
-    if (typeof db !== "undefined") {
-      await db.close();
-    }
-  });
 </script>
 
 {#if datagrid}

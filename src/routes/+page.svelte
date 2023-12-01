@@ -1,14 +1,15 @@
 <script lang="ts">
   import PageHead from "$lib/components/PageHead.svelte";
+  import { db } from "$lib/stores";
+  import { onMount } from "svelte";
 
-  const url_prefix =
-    "https://baseball.computer/timeball/dbt/timeball_remote.db";
+  // Warm up db connection
+  onMount(async () => {
+    db.subscribe(() => {});
+  });
 </script>
 
-<PageHead
-  title="Home"
-  description="An awesome blog about development with Svelte"
-/>
+<PageHead title="Home" description="" />
 
 <div
   class="flex items-center justify-center text-center xl:justify-start xl:pe-0 xl:ps-10 xl:text-start"

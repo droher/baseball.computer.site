@@ -1,4 +1,6 @@
-import { readable, writable } from "svelte/store";
+import { writable } from "svelte/store";
+import { DbContextManager } from "./io/db";
+import { browser } from "$app/environment";
 
 export enum QueryStatus {
   Success,
@@ -8,3 +10,12 @@ export enum QueryStatus {
 }
 
 export const queryStatus = writable<QueryStatus>(QueryStatus.Idle);
+
+export const db = writable<DbContextManager | null>(null, (set) => {
+  const startDb = async () => {
+    set(await DbContextManager.init());
+  };
+  if (browser) {
+    startDb();
+  };
+});

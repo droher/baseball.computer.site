@@ -1,9 +1,13 @@
 <script lang="ts">
+  import { db } from "$lib/stores";
+
   export let title: string;
   export let description: string;
 
   const siteTitle = "Timeball";
   const formattedTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+
+  import { onMount } from "svelte";
 </script>
 
 <svelte:head>

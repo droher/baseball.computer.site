@@ -1,9 +1,9 @@
 import { slugFromPath } from "$lib/blog/slugFromPath";
-export const prerender = true;
+import type { EntryGenerator } from "./[slug]/$types";
 
 const MAX_POSTS = 10;
 
-export const load = async ({ url }) => {
+const getPublishedPosts = async (): Promise<App.BlogPost[]> => {
   const modules = import.meta.glob(`/src/posts/*.{md,svx,svelte.md}`);
 
   const postPromises = Object.entries(modules).map(([path, resolver]) =>
@@ -17,11 +17,25 @@ export const load = async ({ url }) => {
   );
 
   const posts = await Promise.all(postPromises);
-  const publishedPosts = posts
-    .filter((post) => post.published)
-    .slice(0, MAX_POSTS);
-
-  publishedPosts.sort((a, b) => (new Date(a.date) > new Date(b.date) ? -1 : 1));
-
-  return { posts: publishedPosts };
+  return posts.filter((post) => post.published);
 };
+
+export const load = async ({ url }) => {
+  let posts = await getPublishedPosts();
+
+  posts
+    .slice(0, MAX_POSTS)
+    .sort((a, b) => (new Date(a.date) > new Date(b.date) ? -1 : 1));
+
+  return { posts: posts };
+};
+
+export const entries: EntryGenerator = async () => {
+  const posts = await getPublishedPosts();
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+};
+
+export const prerender = true;
