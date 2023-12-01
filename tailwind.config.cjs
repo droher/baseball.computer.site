@@ -11,7 +11,8 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        special: ["Special Elite"]
+        special: ["Special Elite"],
+        weiss: ["Weiss Initialen"]
       }
     }
   },

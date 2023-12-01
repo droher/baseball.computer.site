@@ -1,0 +1,41 @@
+.prose h1 {
+    @apply text-3xl font-bold;
+  }
+  
+  .prose h2 {
+    @apply text-2xl font-bold;
+  }
+  
+  .prose h3 {
+    @apply text-xl font-bold;
+  }
+  
+  .prose p {
+    @apply text-base my-2;
+  }
+  
+  .prose a {
+    @apply text-primary underline hover:text-secondary;
+  }
+  
+  .prose ul,
+  .prose ol {
+    @apply list-inside list-disc;
+  }
+  
+  .prose ul li,
+  .prose ol li {
+    @apply mb-1;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 italic;
+  }
+  
+  .prose pre {
+    @apply bg-base-200 p-4 rounded-lg overflow-x-auto;
+  }
+  
+  .prose code {
+    @apply font-mono text-sm bg-neutral p-1 rounded;
+  }

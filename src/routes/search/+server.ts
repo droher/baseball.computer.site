@@ -1,6 +1,6 @@
-import { json } from '@sveltejs/kit';
+import { json } from "@sveltejs/kit";
 
 export function POST({ request }) {
-    console.log(request);
-    return json({ message: 'Hello world!' })
+  console.log(request);
+  return json({ message: "Hello world!" });
 }
