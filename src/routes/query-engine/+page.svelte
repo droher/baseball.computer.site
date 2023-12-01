@@ -11,7 +11,7 @@
   };
 </script>
 
-<main class="grow flex flex-col min-h-fit">
+<main class="grow flex flex-col">
   <QueryInput bind:value={text} />
   <div class="flex flex-row flex-wrap space-x-2 m-2">
     <button on:click={handleQuery} class="btn btn-primary flex-auto">

@@ -10,16 +10,18 @@
 </script>
 
 <PageHead title="Home" description="" />
-
-<div class="hero flex flex-col items-center gap-6 xl:flex-row">
-  <div class="h-1"></div>
-  <h1 class="hero-content text-center text-4xl md:text-8xl font-weiss">Timeball</h1>
-  <h2 class="hero-content font-title text-center text-2xl md:text-4xl">
-    A historical baseball database
-  </h2>
-</div>
-<div class="hero-content flex space-x-8">
-  <a class="btn btn-primary flex-auto max-w-md" href="/query-engine"
-    >Query Now</a
-  >
+<div class="grow bg-gradient-to-b from-base-100 to-base-300">
+  <div class="hero flex flex-col items-center gap-6 xl:flex-row">
+    <h1 class="hero-content text-center text-4xl md:text-8xl font-weiss">
+      Timeball
+    </h1>
+    <h2 class="hero-content font-title text-center text-2xl md:text-4xl">
+      A historical baseball database
+    </h2>
+  </div>
+  <div class="hero-content flex space-x-8">
+    <a class="btn btn-primary flex-auto max-w-md" href="/query-engine"
+      >Query Now</a
+    >
+  </div>
 </div>

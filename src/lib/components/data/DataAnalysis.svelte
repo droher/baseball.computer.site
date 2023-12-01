@@ -3,9 +3,8 @@
   import "@finos/perspective-viewer/dist/css/pro.css";
   import "@finos/perspective-viewer/dist/css/pro-dark.css";
 
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import perspective, { type PerspectiveWorker } from "@finos/perspective";
-
   import type { IPerspectiveViewerElement } from "@finos/perspective-viewer";
   import { Table, tableToIPC } from "apache-arrow";
 
@@ -16,14 +15,21 @@
   let viewer1: IPerspectiveViewerElement;
   let worker: PerspectiveWorker;
   let hidden = true;
+  let error_message: string = "";
 
   $: {
     if (typeof query !== "undefined") {
-      getTable();
+      getTable().catch((e) => {
+        error_message = e.message;
+        queryStatus.set(QueryStatus.Idle);
+      });
     }
   }
 
   const getTable = async () => {
+    queryStatus.set(QueryStatus.Running);
+    error_message = "";
+
     let pTable;
     let batch_buffer = [];
     const conn =
@@ -31,7 +37,6 @@
       (() => {
         throw new Error("No database connection");
       })();
-    queryStatus.set(QueryStatus.Running);
 
     for await (const { batch, done } of conn.getBatches(query)) {
       batch_buffer.push(batch);
@@ -62,5 +67,9 @@
     worker = perspective.shared_worker();
   });
 </script>
+
+{#if error_message}
+  <div class="alert alert-error">{error_message}</div>
+{/if}
 
 <perspective-viewer hidden={hidden} bind:this={viewer1} class="grow min-h-[50vh]" />
