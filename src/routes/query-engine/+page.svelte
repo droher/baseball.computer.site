@@ -13,22 +13,21 @@
 
 <main class="grow flex flex-col min-h-fit">
   <QueryInput bind:value={text} />
-  <div class="flex flex-row space-x-4 m-2">
-    <button on:click={handleQuery} class="btn btn-primary flex-auto basis-1/2">
+  <div class="flex flex-row flex-wrap space-x-2 m-2">
+    <button on:click={handleQuery} class="btn btn-primary flex-auto">
       {#if $queryStatus === QueryStatus.Running}
         <span class="animate-pulse">Running...</span>
       {:else}
         Analyze
       {/if}
     </button>
-    <button disabled class="btn btn-accent flex-auto"
+    <button class="btn btn-accent hidden"
       >Download
       <select class="select bg-white max-w-xs">
         <option disabled selected>Format</option>
         <option>CSV</option>
         <option>Parquet</option>
       </select>
-      (Coming Soon)
     </button>
   </div>
   <DataAnalysis {query} />
