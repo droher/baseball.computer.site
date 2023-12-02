@@ -6,13 +6,12 @@
   import { QueryStatus, queryStatus } from "$lib/stores";
   import Rube from "$lib/components/data/Rube.svelte";
   import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
 
-  let query =
-    atob(decodeURIComponent($page.url.searchParams.get("query") || "")) ||
-    undefined;
-  let text = query;
+  let query: string | undefined;
+  let text: string | undefined;
 
   let showRube = false;
   $: {
@@ -31,6 +30,11 @@
     );
     goto($page.url.toString());
   };
+
+  onMount(() => {
+    query = atob(decodeURIComponent($page.url.searchParams.get("query") || "")) || undefined;
+    text = query;
+  });
 </script>
 
 <main class="grow flex flex-col">
