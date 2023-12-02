@@ -14,7 +14,7 @@
   onMount(() => {
     setTimeout(() => {
       hidden = "hidden";
-    }, 10000);
+    }, 8000);
   });
 </script>
 

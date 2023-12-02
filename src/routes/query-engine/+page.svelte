@@ -1,21 +1,35 @@
 <script lang="ts">
+  import { page } from "$app/stores";
+
   import QueryInput from "$lib/components/data/QueryInput.svelte";
   import DataAnalysis from "$lib/components/data/DataAnalysis.svelte";
   import { QueryStatus, queryStatus } from "$lib/stores";
   import Rube from "$lib/components/data/Rube.svelte";
-  
-  const rubeStrings = ["rube", "waddell", "waddr101"]
-  
-  let query: string;
-  let text: string;
+  import { goto } from "$app/navigation";
+
+  const rubeStrings = ["rube", "waddell", "waddr101"];
+
+  let query =
+    atob(decodeURIComponent($page.url.searchParams.get("query") || "")) ||
+    undefined;
+  let text = query;
 
   let showRube = false;
   $: {
-    showRube = rubeStrings.some(substring=>query?.toLowerCase().includes(substring))
+    showRube =
+      rubeStrings.some((substring) =>
+        query?.toLowerCase().includes(substring)
+      ) && $queryStatus === QueryStatus.Running;
   }
 
   const handleQuery = () => {
     query = text;
+    $queryStatus = QueryStatus.Ready;
+    $page.url.searchParams.set(
+      "query",
+      encodeURIComponent(btoa(query?.trim() || ""))
+    );
+    goto($page.url.toString());
   };
 </script>
 

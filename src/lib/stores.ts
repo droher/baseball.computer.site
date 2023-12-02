@@ -5,6 +5,7 @@ import { browser } from "$app/environment";
 export enum QueryStatus {
   Success,
   Running,
+  Ready,
   Failure,
   Idle,
 }

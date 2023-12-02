@@ -18,9 +18,11 @@
   let error_message: string = "";
 
   $: {
-    if (typeof query !== "undefined") {
+    if (query && $queryStatus === QueryStatus.Ready) {
       getTable().catch((e) => {
         error_message = e.message;
+      })
+      .finally(() => {
         queryStatus.set(QueryStatus.Idle);
       });
     }
@@ -71,4 +73,4 @@
 {#if error_message}
   <div class="alert alert-error">{error_message}</div>
 {/if}
-<perspective-viewer hidden={hidden} bind:this={viewer1} class="grow min-h-[50vh]" />
+<perspective-viewer {hidden} bind:this={viewer1} class="grow min-h-[50vh]" />
