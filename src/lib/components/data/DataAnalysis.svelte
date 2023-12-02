@@ -71,5 +71,4 @@
 {#if error_message}
   <div class="alert alert-error">{error_message}</div>
 {/if}
-
 <perspective-viewer hidden={hidden} bind:this={viewer1} class="grow min-h-[50vh]" />

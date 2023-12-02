@@ -16,7 +16,9 @@
       Timeball
     </h1>
     <h2 class="hero-content font-title text-center text-2xl md:text-4xl">
-      A historical baseball database
+      An open historical baseball database
+      <br>
+      That you can query from anywhere:
     </h2>
   </div>
   <div class="hero-content flex space-x-8">

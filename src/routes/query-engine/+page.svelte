@@ -2,9 +2,17 @@
   import QueryInput from "$lib/components/data/QueryInput.svelte";
   import DataAnalysis from "$lib/components/data/DataAnalysis.svelte";
   import { QueryStatus, queryStatus } from "$lib/stores";
-
+  import Rube from "$lib/components/data/Rube.svelte";
+  
+  const rubeStrings = ["rube", "waddell", "waddr101"]
+  
   let query: string;
   let text: string;
+
+  let showRube = false;
+  $: {
+    showRube = rubeStrings.some(substring=>query?.toLowerCase().includes(substring))
+  }
 
   const handleQuery = () => {
     query = text;
@@ -30,5 +38,8 @@
       </select>
     </button>
   </div>
+  {#if showRube}
+    <Rube />
+  {/if}
   <DataAnalysis {query} />
 </main>
