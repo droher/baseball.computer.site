@@ -7,9 +7,16 @@
   onMount(async () => {
     db.subscribe(() => {});
   });
+
+  export const config = {
+    runtime: "edge",
+  };
 </script>
 
-<PageHead title="Home" description="" />
+<PageHead
+  title="Home"
+  description="Homepage for Timeball: An open historical baseball database."
+/>
 <div class="grow bg-gradient-to-b from-base-100 to-base-300">
   <div class="hero flex flex-col items-center gap-6 xl:flex-row">
     <h1 class="hero-content text-center text-4xl md:text-8xl font-weiss">
@@ -17,7 +24,7 @@
     </h1>
     <h2 class="hero-content font-title text-center text-2xl md:text-4xl">
       An open historical baseball database
-      <br>
+      <br />
       That you can query from anywhere:
     </h2>
   </div>

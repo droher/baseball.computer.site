@@ -1,4 +1,3 @@
-/* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +10,7 @@
   }
   @font-face {
     font-family: "Weiss Initialen";
-    src: url("/fonts/weiss-initialen/WeissInitialen.ttf");
+    src: url("/fonts/weiss-initialen/weissinitialen.woff2");
     font-weight: normal;
     font-display: swap;
   }
