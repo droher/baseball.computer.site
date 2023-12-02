@@ -7,10 +7,6 @@
   onMount(async () => {
     db.subscribe(() => {});
   });
-
-  export const config = {
-    runtime: "edge",
-  };
 </script>
 
 <PageHead

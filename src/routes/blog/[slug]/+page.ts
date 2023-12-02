@@ -1,4 +1,4 @@
-import type { EntryGenerator, PageLoad } from "./$types";
+import type { PageLoad } from "./$types";
 import { slugFromPath } from "$lib/blog/slugFromPath";
 import { error } from "@sveltejs/kit";
 
