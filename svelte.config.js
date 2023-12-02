@@ -12,7 +12,7 @@ const config = {
   preprocess: [vitePreprocess({}), mdsvex(mdsvexConfig)],
 
   kit: {
-    adapter: adapter({memory: 128, split: true}),
+    adapter: adapter({memory: 128, split: true, runtime: "edge"}),
   },
 };
 
