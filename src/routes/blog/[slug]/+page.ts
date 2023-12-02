@@ -1,5 +1,5 @@
-import type { PageLoad } from "./$types";
-import { slugFromPath } from "$lib/blog/slugFromPath";
+import type { EntryGenerator, PageLoad } from "./$types";
+import { getPublishedPosts, slugFromPath } from "$lib/blog/util";
 import { error } from "@sveltejs/kit";
 
 export const load: PageLoad = async ({ params }) => {
@@ -24,3 +24,14 @@ export const load: PageLoad = async ({ params }) => {
     frontmatter: post.metadata,
   };
 };
+
+export const entries: EntryGenerator = async () => {
+  const posts = await getPublishedPosts();
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+};
+
+
+export const prerender = true;
