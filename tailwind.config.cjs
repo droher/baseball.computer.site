@@ -1,4 +1,4 @@
-import theme_list from "./src/lib/theme_list";
+import { themeList } from "./src/lib/themeList";
 
 const daisyui = require("daisyui");
 const typography = require("@tailwindcss/typography");
@@ -20,7 +20,7 @@ const config = {
   plugins: [forms, typography, daisyui],
 
   daisyui: {
-    themes: theme_list
+    themes: themeList
   }
 };
 

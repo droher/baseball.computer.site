@@ -7,6 +7,7 @@
   import Rube from "$lib/components/data/Rube.svelte";
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { db } from "$lib/stores";
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
 
@@ -32,6 +33,9 @@
   };
 
   onMount(() => {
+    // Warm up db connection
+    db.subscribe(() => {});
+  
     query = atob(decodeURIComponent($page.url.searchParams.get("query") || "")) || undefined;
     text = query;
   });

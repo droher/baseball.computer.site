@@ -13,7 +13,7 @@
     <button class="btn btn-ghost">Doc</button>
     <a class="btn btn-ghost" href="/blog">Blog</a>
     <button class="btn btn-ghost">About</button>
-  <div class="hidden sm:block">
+  <div class="hidden">
     <ThemeSwitcher />
     </div>
   </div>

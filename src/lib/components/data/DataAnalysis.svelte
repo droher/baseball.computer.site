@@ -19,12 +19,13 @@
 
   $: {
     if (query && $queryStatus === QueryStatus.Ready) {
-      getTable().catch((e) => {
-        error_message = e.message;
-      })
-      .finally(() => {
-        queryStatus.set(QueryStatus.Idle);
-      });
+      getTable()
+        .catch((e) => {
+          error_message = e.message;
+        })
+        .finally(() => {
+          queryStatus.set(QueryStatus.Idle);
+        });
     }
   }
 
@@ -66,7 +67,32 @@
     await import("@finos/perspective-viewer-d3fc");
     await import("@finos/perspective-viewer-datagrid");
 
-    worker = perspective.shared_worker();
+    const workerSettings = {
+      types: {
+        integer: {
+          format: {
+            useGrouping: false,
+          },
+        },
+        float: {
+          format: {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 3,
+          },
+        },
+        date: {
+          format: {
+            dateStyle: undefined,
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+        },
+      },
+    };
+
+    // @ts-ignore (this seems to be where formatting needs to get passed)
+    worker = perspective.shared_worker(workerSettings);
   });
 </script>
 
