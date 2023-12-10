@@ -2,7 +2,7 @@
   import Github from "../svg/Github.svelte";
   import HamburgerMenu from "../svg/HamburgerMenu.svelte";
 
-  import logo from "$lib/assets/logo.png";
+  import logo from "$lib/assets/logo-192.png";
 </script>
 
 <div class="navbar bg-neutral text-neutral-content min-w-screen">

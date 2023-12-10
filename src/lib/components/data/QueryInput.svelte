@@ -5,18 +5,16 @@
 
   import Warning from "../svg/Warning.svelte";
 
-  export let schema: Record<string, Array<string>> = {};
+  export let schema: Record<string, Array<String>> = {};
 
-  const initQuery = `SELECT  
-    o.player_id,
-    p.first_name,
-    p.last_name,
-    COUNT(*)
-FROM event_offense_stats AS o
+  const initQuery = `-- Get over 200 offensive statistics for every player and every season in history
+SELECT
+  p.first_name,
+  p.last_name,
+  m.*
+FROM metrics_player_season_league_offense AS m
 JOIN people AS p USING (player_id)
-WHERE runs_batted_in > 0
-    AND event_key IN (SELECT event_key FROM event_pitching_flags WHERE blown_save_flag)
-GROUP BY 1`;
+ORDER BY home_runs DESC`;
 
   export let value = initQuery;
   let isMobile = false;
@@ -53,5 +51,11 @@ GROUP BY 1`;
 
 <CodeMirror
   bind:value
-  lang={sql({ dialect: PostgreSQL, upperCaseKeywords: true, schema: schema, defaultSchema: "main_models" })}
+  lang={sql({
+    dialect: PostgreSQL,
+    upperCaseKeywords: true,
+    schema: schema,
+    defaultSchema: "main_models",
+  })}
+  aria-label="Enter a query"
 />

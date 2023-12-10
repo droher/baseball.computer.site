@@ -21,10 +21,13 @@
     if (query && $queryStatus === QueryStatus.Ready) {
       getTable()
         .catch((e: Error) => {
-          if(e.message.includes("Must pass at least one record batch or an explicit Schema")) {
+          if (
+            e.message.includes(
+              "Must pass at least one record batch or an explicit Schema"
+            )
+          ) {
             error_message = "Query returned 0 rows.";
-          }
-          else {
+          } else {
             error_message = e.message;
           }
         })

@@ -9,6 +9,7 @@
   import { onMount } from "svelte";
   import { db } from "$lib/stores";
   import type { PageData } from "./$types";
+  import PageHead from "$lib/components/PageHead.svelte";
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
 
@@ -38,12 +39,18 @@
   onMount(() => {
     // Warm up db connection
     db.subscribe(() => {});
-  
-    query = atob(decodeURIComponent($page.url.searchParams.get("query") || "")) || undefined;
+
+    query =
+      atob(decodeURIComponent($page.url.searchParams.get("query") || "")) ||
+      undefined;
     text = query;
   });
 </script>
 
+<PageHead
+  title="Query Engine"
+  description="Write SQL queries against the baseball.computer database"
+/>
 <main class="grow flex flex-col">
   <QueryInput schema={data.schema} bind:value={text} />
   <div class="flex flex-row flex-wrap space-x-2 m-2">
