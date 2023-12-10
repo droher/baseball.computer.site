@@ -20,8 +20,13 @@
   $: {
     if (query && $queryStatus === QueryStatus.Ready) {
       getTable()
-        .catch((e) => {
-          error_message = e.message;
+        .catch((e: Error) => {
+          if(e.message.includes("Must pass at least one record batch or an explicit Schema")) {
+            error_message = "Query returned 0 rows.";
+          }
+          else {
+            error_message = e.message;
+          }
         })
         .finally(() => {
           queryStatus.set(QueryStatus.Idle);
@@ -76,7 +81,7 @@
         },
         float: {
           format: {
-            minimumFractionDigits: 1,
+            minimumFractionDigits: 0,
             maximumFractionDigits: 3,
           },
         },

@@ -62,8 +62,8 @@ class DbContextManager {
 		const db = await getDB();
 
 		const conn = await db.connect();
-		await conn.query(`ATTACH 'https://www.baseball.computer/dbt/timeball_remote.db' (READ_ONLY)`);
-		await conn.query(`USE timeball_remote`);
+		await conn.query(`ATTACH 'https://www.baseball.computer/dbt/bc_remote.db' (READ_ONLY)`);
+		await conn.query(`USE bc_remote`);
 		await conn.query(`SET SCHEMA=main_models`);
 
 		console.debug('DB is ready for queries.');
@@ -71,7 +71,7 @@ class DbContextManager {
 	}
 
 	async close() {
-		await this.conn.query(`DETACH timeball_remote`);
+		await this.conn.query(`DETACH bc_remote`);
 		await this.conn.close();
 		await this.db.terminate();
 	}

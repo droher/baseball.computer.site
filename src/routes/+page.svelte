@@ -11,22 +11,72 @@
 
 <PageHead
   title="Home"
-  description="Homepage for Timeball: An open historical baseball database."
+  description="Homepage for baseball.computer: An open historical baseball database."
 />
 <div class="grow bg-gradient-to-b from-base-100 to-base-300">
-  <div class="hero flex flex-col items-center gap-6 xl:flex-row">
-    <h1 class="hero-content text-center text-4xl md:text-8xl font-weiss">
-      Timeball
-    </h1>
-    <h2 class="hero-content font-title text-center text-2xl md:text-4xl">
-      An open historical baseball database
-      <br />
-      That you can query from anywhere:
-    </h2>
-  </div>
-  <div class="hero-content flex space-x-8">
-    <a class="btn btn-primary flex-auto max-w-md" href="/query-engine"
-      >Query Now</a
-    >
+  <div class="container mx-auto p-4">
+    <div class="hero flex flex-col items-center gap-6">
+      <h1 class="hero-content text-center text-4xl md:text-8xl font-title">
+        baseball.computer
+      </h1>
+        <a class="btn btn-primary" href="/query-engine"
+          >Query Now</a>
+    </div>
+    <!-- Database Purpose -->
+    <section class="mb-10">
+      <h2 class="text-3xl font-bold mb-4">Our Goal</h2>
+      <p class="text-lg">
+
+      </p>
+    </section>
+
+    <!-- Features of the Database -->
+    <section class="mb-10">
+      <h2 class="text-3xl font-bold mb-4">Database Features</h2>
+      <ul class="list-disc pl-5">
+        <li>
+
+        </li>
+        <li>
+
+        </li>
+        <li>
+        </li>
+        <!-- Add more features as needed -->
+      </ul>
+    </section>
+
+    <!-- Navigation and Usage -->
+    <section class="mb-10">
+      <h2 class="text-3xl font-bold mb-4">Navigating the Database</h2>
+      <p>
+      </p>
+      <ul class="list-disc pl-5">
+        <li>
+
+        </li>
+        <li>
+
+        </li>
+        <li>
+
+        </li>
+        <!-- Include more navigation tips as relevant -->
+      </ul>
+    </section>
+
+    <!-- Contact Information -->
+    <section>
+      <h2 class="text-3xl font-bold mb-4">Get in Touch</h2>
+      <p>If you have any questions or suggestions, feel free to reach out:</p>
+      <ul>
+        <li>
+          Email: <a href="mailto:david.roher@baseball.computer"
+            >david.roher@baseball.computer</a
+          >
+        </li>
+        <!-- Add more contact options as needed -->
+      </ul>
+    </section>
   </div>
 </div>

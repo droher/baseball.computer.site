@@ -9,7 +9,7 @@
   export let data: PageData;
 </script>
 
-<PageHead title="Blog" description="Timeball Blog" />
+<PageHead title="Blog" description="baseball.computer blog" />
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-1">
   <div class="mt-6 grid gap-5 mx-auto grid-cols-1">

@@ -4,7 +4,7 @@
   export let title: string;
   export let description: string;
 
-  const siteTitle = "Timeball";
+  const siteTitle = "baseball.computer";
   const formattedTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
   import { onMount } from "svelte";
