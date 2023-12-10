@@ -8,11 +8,14 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { db } from "$lib/stores";
+  import type { PageData } from "./$types";
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
 
   let query: string | undefined;
   let text: string | undefined;
+
+  export let data: PageData;
 
   let showRube = false;
   $: {
@@ -42,7 +45,7 @@
 </script>
 
 <main class="grow flex flex-col">
-  <QueryInput bind:value={text} />
+  <QueryInput schema={data.schema} bind:value={text} />
   <div class="flex flex-row flex-wrap space-x-2 m-2">
     <button on:click={handleQuery} class="btn btn-primary flex-auto">
       {#if $queryStatus === QueryStatus.Running}

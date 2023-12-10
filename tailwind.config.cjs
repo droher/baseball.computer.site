@@ -12,16 +12,16 @@ const config = {
     extend: {
       fontFamily: {
         special: ["Special Elite"],
-        weiss: ["Weiss Initialen"]
-      }
-    }
+        play: ["Play"],
+      },
+    },
   },
 
   plugins: [forms, typography, daisyui],
 
   daisyui: {
-    themes: themeList
-  }
+    themes: themeList,
+  },
 };
 
 module.exports = config;
