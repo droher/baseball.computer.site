@@ -38,6 +38,10 @@
   }
 
   const getTable = async () => {
+    // TODO: Investigate why buffer length > 1 seems to cause random ints
+    // to appear in null int values
+    const BUFFER_LENGTH = 1;
+
     queryStatus.set(QueryStatus.Running);
     error_message = "";
 
@@ -51,7 +55,7 @@
 
     for await (const { batch, done } of conn.getBatches(query)) {
       batch_buffer.push(batch);
-      if (batch_buffer.length >= 10 || done) {
+      if (batch_buffer.length >= BUFFER_LENGTH || done) {
         var arrowTable = new Table(batch_buffer);
         batch_buffer = [];
         var ipc = tableToIPC(arrowTable, "file");
