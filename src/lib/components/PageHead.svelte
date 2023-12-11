@@ -7,7 +7,7 @@
   const siteTitle = "baseball.computer";
   const formattedTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
-  import { onMount } from "svelte";
+  import logo from "$lib/assets/logo.png";
 </script>
 
 <svelte:head>
@@ -16,4 +16,12 @@
   <meta property="og:site_name" content={siteTitle} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
+  <meta property="og:image" content="{logo}" />
+  <meta property="og:url" content="https://baseball.computer" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{title}" />
+  <meta name="twitter:description" content="{description}" />
+  <meta name="twitter:image" content="{logo}" />
 </svelte:head>
