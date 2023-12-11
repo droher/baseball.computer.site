@@ -23,7 +23,6 @@
         <li><a href="/query-engine">Query</a></li>
         <li><a href="https://docs.baseball.computer">Docs</a></li>
         <li><a href="/blog">Blog</a></li>
-        <li><button>About</button></li>
         <li>
           <a href="https://github.com/droher/baseball.computer">GitHub</a>
         </li>
@@ -46,7 +45,6 @@
       <li><a href="/query-engine">Query</a></li>
       <li><a href="https://docs.baseball.computer">Docs</a></li>
       <li><a href="/blog">Blog</a></li>
-      <li><button>About</button></li>
     </ul>
   </div>
   <div class="navbar-end">

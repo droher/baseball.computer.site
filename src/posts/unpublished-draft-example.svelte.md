@@ -1,9 +1,7 @@
 ---
 title: 'Hello world'
-description: ''
-author: ''
-date: '2021-05-10'
+description: 'There will be some more posts here soon.'
+author: 'David Roher'
+date: '2023-12-11'
 published: true
 ---
-
-This is an example of an unpublished post! Your site will display a 404 page until you set your `published` flag to `true`.

@@ -7,12 +7,15 @@
 
   export let schema: Record<string, Array<String>> = {};
 
-  const initQuery = `-- Get over 200 offensive statistics for every player and every season in history
+  const initQuery = `-- Get over 200 offensive statistics for every player in MLB history
+-- To get started, click the "Analyze" button below
+-- To explore the database, check out the documentation:
+-- https://docs.baseball.computer
 SELECT
   p.first_name,
   p.last_name,
   m.*
-FROM metrics_player_season_league_offense AS m
+FROM metrics_player_career_offense AS m
 JOIN people AS p USING (player_id)
 ORDER BY home_runs DESC`;
 
@@ -40,7 +43,7 @@ ORDER BY home_runs DESC`;
   <div role="alert" class="alert alert-warning">
     <Warning />
     <span
-      >Queries may use a lot of data. Wifi or unlimited plan recommended.</span
+      >Mobile queries may not behave as expected due to low memory. Do not run on metered data connections.</span
     >
     <button
       class="btn btn-ghost justify-end"
