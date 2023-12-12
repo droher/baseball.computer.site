@@ -6,7 +6,6 @@
   const formattedTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
   import logo from "$lib/assets/logo.png";
-  import logoCard from "$lib/assets/logo-wide.png";
 </script>
 
 <svelte:head>
@@ -22,5 +21,5 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="{title}" />
   <meta name="twitter:description" content="{description}" />
-  <meta name="twitter:image" content="{logoCard}" />
+  <meta name="twitter:image" content="{logo}" />
 </svelte:head>
