@@ -22,7 +22,7 @@
       </h1>
       <img class="hero-content h-64" src={logo} alt="baseball.computer logo" />
       <h2 class="text-2xl font-title">A historical database</h2>
-      <div class="flex flex-row space-x-2">
+      <div class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
         <a class="btn btn-primary" href="/query-engine">Query Now</a>
         <a class="btn btn-info" href="https://docs.baseball.computer"
           >Read the Docs</a
