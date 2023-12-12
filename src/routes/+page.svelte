@@ -12,7 +12,7 @@
 
 <PageHead
   title="Home"
-  description="Homepage for baseball.computer: An open historical baseball database."
+  description="An open historical baseball database you can query from anywhere."
 />
 <div class="grow bg-gradient-to-b from-base-100 to-base-300">
   <div class="container mx-auto p-8 space-y-8">
