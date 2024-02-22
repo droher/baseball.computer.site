@@ -30,6 +30,7 @@
           } else {
             error_message = e.message;
           }
+          throw e;
         })
         .finally(() => {
           queryStatus.set(QueryStatus.Idle);
