@@ -62,7 +62,7 @@ class DbContextManager {
 		const db = await getDB();
 
 		const conn = await db.connect();
-		await conn.query(`ATTACH 'https://data.baseball.computer/dbt/bc_remote.db' (READ_ONLY)`);
+		await conn.query(`ATTACH 'https://data.baseball.computer/dbt/bc_remote.db' (READ_ONLY, TYPE DUCKDB)`);
 		await conn.query(`USE bc_remote`);
 		await conn.query(`SET SCHEMA=main_models`);
 
