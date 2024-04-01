@@ -6,28 +6,28 @@ settings:
 
 dependencies:
   '@duckdb/duckdb-wasm':
-    specifier: 1.28.0
-    version: 1.28.0
+    specifier: 1.28.1-dev173.0
+    version: 1.28.1-dev173.0
   '@finos/perspective':
-    specifier: ^2.8.0
-    version: 2.8.0
+    specifier: ^2.10.0
+    version: 2.10.0
   '@finos/perspective-viewer':
-    specifier: ^2.8.0
-    version: 2.8.0
+    specifier: ^2.10.0
+    version: 2.10.0
   '@finos/perspective-viewer-d3fc':
-    specifier: ^2.8.0
-    version: 2.8.0(d3-brush@3.0.0)(d3-dispatch@3.0.1)(d3-fetch@3.0.1)(d3-path@3.1.0)(d3-random@3.0.1)(d3-scale-chromatic@3.0.0)(d3-scale@4.0.2)(d3-shape@3.2.0)(d3-time@3.1.0)(d3-zoom@3.0.0)
+    specifier: ^2.10.0
+    version: 2.10.0(d3-brush@3.0.0)(d3-dispatch@3.0.1)(d3-fetch@3.0.1)(d3-path@3.1.0)(d3-random@3.0.1)(d3-scale-chromatic@3.0.0)(d3-scale@4.0.2)(d3-shape@3.2.0)(d3-time@3.1.0)(d3-zoom@3.0.0)
   '@finos/perspective-viewer-datagrid':
-    specifier: ^2.8.0
-    version: 2.8.0
+    specifier: ^2.10.0
+    version: 2.10.0
   apache-arrow:
-    specifier: ^13.0.0
-    version: 13.0.0
+    specifier: ^15.0.2
+    version: 15.0.2
 
 devDependencies:
   '@codemirror/lang-sql':
-    specifier: 6.5.5
-    version: 6.5.5(@codemirror/view@6.22.1)
+    specifier: 6.6.2
+    version: 6.6.2(@codemirror/view@6.22.1)
   '@fontsource/roboto-mono':
     specifier: ^5.0.16
     version: 5.0.16
@@ -35,20 +35,20 @@ devDependencies:
     specifier: ^1.40.1
     version: 1.40.1
   '@sveltejs/adapter-vercel':
-    specifier: ^5.1.0
-    version: 5.1.0(@sveltejs/kit@2.5.0)
+    specifier: ^5.2.0
+    version: 5.2.0(@sveltejs/kit@2.5.5)
   '@sveltejs/kit':
-    specifier: ^2.5.0
-    version: 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.11)(vite@5.1.3)
+    specifier: ^2.5.5
+    version: 2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.11)(vite@5.1.3)
   '@sveltejs/vite-plugin-svelte':
-    specifier: ^3.0.0
+    specifier: ^3.0.2
     version: 3.0.2(svelte@4.2.11)(vite@5.1.3)
   '@tailwindcss/forms':
     specifier: ^0.5.7
-    version: 0.5.7(tailwindcss@3.4.1)
+    version: 0.5.7(tailwindcss@3.4.3)
   '@tailwindcss/typography':
     specifier: ^0.5.10
-    version: 0.5.10(tailwindcss@3.4.1)
+    version: 0.5.10(tailwindcss@3.4.3)
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.13.1
     version: 6.13.1(@typescript-eslint/parser@6.13.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -62,8 +62,8 @@ devDependencies:
     specifier: ^10.4.16
     version: 10.4.16(postcss@8.4.35)
   daisyui:
-    specifier: ^4.7.2
-    version: 4.7.2(postcss@8.4.35)
+    specifier: ^4.9.0
+    version: 4.9.0(postcss@8.4.35)
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -113,8 +113,8 @@ devDependencies:
     specifier: 1.2.0
     version: 1.2.0(codemirror@6.0.1)(svelte@4.2.11)
   tailwindcss:
-    specifier: ^3.4.1
-    version: 3.4.1
+    specifier: ^3.4.3
+    version: 3.4.3
   theme-change:
     specifier: 2.5.0
     version: 2.5.0
@@ -182,8 +182,8 @@ packages:
       '@lezer/common': 1.2.1
     dev: true
 
-  /@codemirror/lang-sql@6.5.5(@codemirror/view@6.22.1):
-    resolution: {integrity: sha512-DvOaP2RXLb2xlxJxxydTFfwyYw5YDqEFea6aAfgh9UH0kUD6J1KFZ0xPgPpw1eo/5s2w3L6uh5PVR7GM23GxkQ==}
+  /@codemirror/lang-sql@6.6.2(@codemirror/view@6.22.1):
+    resolution: {integrity: sha512-ZVt7AHflRDFVwxSq7nnj1pko9yR6wKFDtc6Ln7zUs8RX34v5sgVxy3d2lQfORhMPVblEJLaugn+sjwRmAFWNIg==}
     dependencies:
       '@codemirror/autocomplete': 6.11.1(@codemirror/language@6.9.3)(@codemirror/state@6.3.2)(@codemirror/view@6.22.1)(@lezer/common@1.2.1)
       '@codemirror/language': 6.9.3
@@ -458,10 +458,10 @@ packages:
       d3-zoom: 3.0.0
     dev: false
 
-  /@duckdb/duckdb-wasm@1.28.0:
-    resolution: {integrity: sha512-YaswpEmxr1Sp20/FZbWR7bZBJqj6xQXX2m4LLzYBnA02g4K1yrpxsBWmkxQyMbrH6AHKhcUUqAlaXfA2Rvaa3w==}
+  /@duckdb/duckdb-wasm@1.28.1-dev173.0:
+    resolution: {integrity: sha512-iySNE4tG9GCK2VifrWMGdMoqUw//D6lfuvmkwq17gA0QcbmCcuNaIPnBX+mwf161m46JBjv2aaQmTbGS1fdtoA==}
     dependencies:
-      apache-arrow: 13.0.0
+      apache-arrow: 15.0.2
     dev: false
 
   /@esbuild/aix-ppc64@0.19.12:
@@ -708,11 +708,11 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@finos/perspective-viewer-d3fc@2.8.0(d3-brush@3.0.0)(d3-dispatch@3.0.1)(d3-fetch@3.0.1)(d3-path@3.1.0)(d3-random@3.0.1)(d3-scale-chromatic@3.0.0)(d3-scale@4.0.2)(d3-shape@3.2.0)(d3-time@3.1.0)(d3-zoom@3.0.0):
-    resolution: {integrity: sha512-/QchemFYhxwigaT+NWGl8XxMVMGb4QnhbgpF9i5bFtKxXyVXqjl2nPqZK929eHEmwtwPhxBGP9gBNxmVWIyVWQ==}
+  /@finos/perspective-viewer-d3fc@2.10.0(d3-brush@3.0.0)(d3-dispatch@3.0.1)(d3-fetch@3.0.1)(d3-path@3.1.0)(d3-random@3.0.1)(d3-scale-chromatic@3.0.0)(d3-scale@4.0.2)(d3-shape@3.2.0)(d3-time@3.1.0)(d3-zoom@3.0.0):
+    resolution: {integrity: sha512-zgShNcumLd0zVbLyzeEwDtD2XGjsECjkksdIo+B8I8z+uNBZU01oX7UdNQ+RYAhT9d6HQJ+tIGRPIgIc41+MDg==}
     dependencies:
-      '@finos/perspective': 2.8.0
-      '@finos/perspective-viewer': 2.8.0
+      '@finos/perspective': 2.10.0
+      '@finos/perspective-viewer': 2.10.0
       chroma-js: 1.4.1
       d3: 7.8.5
       d3-array: 3.2.4
@@ -735,11 +735,11 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@finos/perspective-viewer-datagrid@2.8.0:
-    resolution: {integrity: sha512-kJIYP7bYUohqkPTbgSDnMxVQzPH6fmTKPBN8XeKb7OGGql32RNEvKnZnA738+HMhNwHqoDZ5dhINJAj0lFkVmw==}
+  /@finos/perspective-viewer-datagrid@2.10.0:
+    resolution: {integrity: sha512-V/fea+/N+5Pqv9W5D7dHxhnSd3Mqu4Fs3AHOjqDmJAG4PKZWYfdnODYmQWYFnENEzAaR9vkvaywxWwyOkoTlYQ==}
     dependencies:
-      '@finos/perspective': 2.8.0
-      '@finos/perspective-viewer': 2.8.0
+      '@finos/perspective': 2.10.0
+      '@finos/perspective-viewer': 2.10.0
       chroma-js: 1.4.1
       regular-table: 0.6.4
     transitivePeerDependencies:
@@ -747,17 +747,17 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@finos/perspective-viewer@2.8.0:
-    resolution: {integrity: sha512-F3iHsv1AVLeE4DOTgWqWfYVGJp/ovOEM+ACugpP0kUuFBJwHFzWrcQkcreQJ/P8e80I2Wq7hdRqpXo4t8TxzNA==}
+  /@finos/perspective-viewer@2.10.0:
+    resolution: {integrity: sha512-AWPduQl3/6kHWyDmBSZU7+IKvYnGz5GdMTc0gtW8jLB1p3tZcoiznyaK7BtfPEMDhOE0BNZP0hXuzN0bCtKXrg==}
     dependencies:
-      '@finos/perspective': 2.8.0
+      '@finos/perspective': 2.10.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
     dev: false
 
-  /@finos/perspective@2.8.0:
-    resolution: {integrity: sha512-D2LSwwFqs4mcZjwBBCNn7JdidK+Th29ZA6rdA1LMKn4pvedok0YzKii0beKTzovhVeKthlcVROKQpFY3DEjptw==}
+  /@finos/perspective@2.10.0:
+    resolution: {integrity: sha512-8g6hsKhpS2gR7GYQWksNDm8kpymHZiSbJkC4HAp1dI95RArksr4U9CUAOnALgw8JI9B5CYI6b1SWQxbzCsTQ6A==}
     engines: {node: '>=14'}
     dependencies:
       stoppable: 1.1.0
@@ -1011,12 +1011,12 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@sveltejs/adapter-vercel@5.1.0(@sveltejs/kit@2.5.0):
-    resolution: {integrity: sha512-Z9yRJ4H2/7LcBlvN2/TKu1H0hWoRGonr8kPhP1GJ23LRW76IbiiX5gs/MLc6+ZGogCZYVJ4USmx6m+RFtvQTRw==}
+  /@sveltejs/adapter-vercel@5.2.0(@sveltejs/kit@2.5.5):
+    resolution: {integrity: sha512-872y13DxKcOBxgnXc4C2YHRw1ow9N1CpUxMH34NYFqCn6PUO6f34qle8v/Byr8sHEC/d+PZIAI3MJs3c8f7TfA==}
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
     dependencies:
-      '@sveltejs/kit': 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.11)(vite@5.1.3)
+      '@sveltejs/kit': 2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.11)(vite@5.1.3)
       '@vercel/nft': 0.26.4
       esbuild: 0.19.12
     transitivePeerDependencies:
@@ -1024,8 +1024,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit@2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.11)(vite@5.1.3):
-    resolution: {integrity: sha512-1uyXvzC2Lu1FZa30T4y5jUAC21R309ZMRG0TPt+PPPbNUoDpy8zSmSNVWYaBWxYDqLGQ5oPNWvjvvF2IjJ1jmA==}
+  /@sveltejs/kit@2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.11)(vite@5.1.3):
+    resolution: {integrity: sha512-ULe3PB00q4+wYRL+IS5FDPsCEVnhEITofm7b9Yz8malcH3r1SAnW/JJ6T13hIMeu8QNRIuVQWo+P4+2VklbnLQ==}
     engines: {node: '>=18.13'}
     hasBin: true
     requiresBuild: true
@@ -1087,16 +1087,22 @@ packages:
       - supports-color
     dev: true
 
-  /@tailwindcss/forms@0.5.7(tailwindcss@3.4.1):
+  /@swc/helpers@0.5.8:
+    resolution: {integrity: sha512-lruDGw3pnfM3wmZHeW7JuhkGQaJjPyiKjxeGhdmfoOT53Ic9qb5JLDNaK2HUdl1zLDeX28H221UvKjfdvSLVMg==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /@tailwindcss/forms@0.5.7(tailwindcss@3.4.3):
     resolution: {integrity: sha512-QE7X69iQI+ZXwldE+rzasvbJiyV/ju1FGHH0Qn2W3FKbuYtqp8LKcy6iSw79fVUT5/Vvf+0XgLCeYVG+UV6hOw==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.1
+      tailwindcss: 3.4.3
     dev: true
 
-  /@tailwindcss/typography@0.5.10(tailwindcss@3.4.1):
+  /@tailwindcss/typography@0.5.10(tailwindcss@3.4.3):
     resolution: {integrity: sha512-Pe8BuPJQJd3FfRnm6H0ulKIGoMEQS+Vq01R6M5aCrFB/ccR/shT+0kXLjouGC1gFLm9hopTFN+DMP0pfwRWzPw==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
@@ -1105,11 +1111,11 @@ packages:
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.1
+      tailwindcss: 3.4.3
     dev: true
 
-  /@types/command-line-args@5.2.0:
-    resolution: {integrity: sha512-UuKzKpJJ/Ief6ufIaIzr3A/0XnluX7RvFgwkV89Yzvm77wCh1kFaFmqN8XEnGcN62EuHdedQjEMb8mYxFLGPyA==}
+  /@types/command-line-args@5.2.3:
+    resolution: {integrity: sha512-uv0aG6R0Y8WHZLTamZwtfsDLVRnOa+n+n5rEvFWL5Na5gZ8V2Teab/duDPFzIIIhs9qizDpcavCusCLJZu62Kw==}
     dev: false
 
   /@types/command-line-usage@5.0.2:
@@ -1150,12 +1156,10 @@ packages:
       '@types/unist': 3.0.2
     dev: true
 
-  /@types/node@20.3.0:
-    resolution: {integrity: sha512-cumHmIAf6On83X7yP+LrsEyUOf/YlociZelmpRYaGFydoaPdxdt80MAbu6vWerQT2COCp2nPvHdsbD7tHn/YlQ==}
-    dev: false
-
-  /@types/pad-left@2.1.1:
-    resolution: {integrity: sha512-Xd22WCRBydkGSApl5Bw0PhAOHKSVjNL3E3AwzKaps96IMraPqy5BvZIsBVK6JLwdybUzjHnuWVwpDd0JjTfHXA==}
+  /@types/node@20.12.2:
+    resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
+    dependencies:
+      undici-types: 5.26.5
     dev: false
 
   /@types/pug@2.0.10:
@@ -1461,19 +1465,18 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /apache-arrow@13.0.0:
-    resolution: {integrity: sha512-3gvCX0GDawWz6KFNC28p65U+zGh/LZ6ZNKWNu74N6CQlKzxeoWHpi4CgEQsgRSEMuyrIIXi1Ea2syja7dwcHvw==}
+  /apache-arrow@15.0.2:
+    resolution: {integrity: sha512-RvwlFxLRpO405PLGffx4N2PYLiF7FD86Q1hHl6J2XCWiq+tTCzpb9ngFw0apFDcXZBMpCzMuwAvA7hjyL1/73A==}
     hasBin: true
     dependencies:
-      '@types/command-line-args': 5.2.0
+      '@swc/helpers': 0.5.8
+      '@types/command-line-args': 5.2.3
       '@types/command-line-usage': 5.0.2
-      '@types/node': 20.3.0
-      '@types/pad-left': 2.1.1
+      '@types/node': 20.12.2
       command-line-args: 5.2.1
       command-line-usage: 7.0.1
       flatbuffers: 23.5.26
       json-bignum: 0.0.3
-      pad-left: 2.1.0
       tslib: 2.6.2
     dev: false
 
@@ -2165,8 +2168,8 @@ packages:
       - d3-zoom
     dev: false
 
-  /daisyui@4.7.2(postcss@8.4.35):
-    resolution: {integrity: sha512-9UCss12Zmyk/22u+JbkVrHHxOzFOyY17HuqP5LeswI4hclbj6qbjJTovdj2zRy8cCH6/n6Wh0lTLjriGnyGh0g==}
+  /daisyui@4.9.0(postcss@8.4.35):
+    resolution: {integrity: sha512-9JsDx4E+30kPxThE+6yEwQokqg1957uwTx/skP2RE98fG6Ten6U+S9YXeQg1a3CI958aF5aOb0oEA+KZFfrZUA==}
     engines: {node: '>=16.9.0'}
     dependencies:
       css-selector-tokenizer: 0.8.0
@@ -3288,13 +3291,6 @@ packages:
       p-limit: 3.1.0
     dev: true
 
-  /pad-left@2.1.0:
-    resolution: {integrity: sha512-HJxs9K9AztdIQIAIa/OIazRAUW/L6B9hbQDxO4X07roW3eo9XqZc2ur9bn1StH9CnbbI9EgvejHQX7CBpCF1QA==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      repeat-string: 1.6.1
-    dev: false
-
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -3620,11 +3616,6 @@ packages:
       unist-util-visit: 5.0.0
       vfile: 6.0.1
     dev: true
-
-  /repeat-string@1.6.1:
-    resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
-    engines: {node: '>=0.10'}
-    dev: false
 
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
@@ -4041,8 +4032,8 @@ packages:
       wordwrapjs: 5.1.0
     dev: false
 
-  /tailwindcss@3.4.1:
-    resolution: {integrity: sha512-qAYmXRfk3ENzuPBakNK0SRrUDipP8NQnEY6772uDhflcQz5EhRdD7JNZxyrFHVQNCwULPBn6FNPp9brpO7ctcA==}
+  /tailwindcss@3.4.3:
+    resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -4204,6 +4195,10 @@ packages:
   /ufo@1.3.2:
     resolution: {integrity: sha512-o+ORpgGwaYQXgqGDwd+hkS4PuZ3QnmqMMxRuajK/a38L6fTpcE5GPIfrf+L/KemFzfUpeUQc1rRS1iDBozvnFA==}
     dev: true
+
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: false
 
   /unified@10.1.2:
     resolution: {integrity: sha512-pUSWAi/RAnVy1Pif2kAoeWNBa3JVrx0MId2LASj8G+7AiHWoKZNTomq6LG326T68U7/e263X6fTdcXIy7XnF7Q==}
