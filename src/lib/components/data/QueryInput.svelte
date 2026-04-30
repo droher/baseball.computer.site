@@ -27,17 +27,6 @@ ORDER BY home_runs DESC`;
 
   let isMobile = $state(false);
 
-  // Pad value to at least 10 lines without adding more whitespace than necessary
-  $effect(() => {
-    const current = value || initQuery;
-    const lineCount = current.split("\n").length;
-    if (lineCount < 10) {
-      value = current + "\n".repeat(10 - lineCount);
-    } else if (current !== value) {
-      value = current;
-    }
-  });
-
   onMount(() => {
     isMobile =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -59,7 +48,7 @@ ORDER BY home_runs DESC`;
   </div>
 {/if}
 
-<div role="region" aria-label="SQL query editor">
+<div role="region" aria-label="SQL query editor" class="query-editor">
   <CodeMirror
     bind:value
     lang={sql({
@@ -70,3 +59,13 @@ ORDER BY home_runs DESC`;
     })}
   />
 </div>
+
+<style>
+  .query-editor :global(.codemirror-wrapper),
+  .query-editor :global(.cm-editor) {
+    min-height: 16rem;
+  }
+  .query-editor :global(.cm-scroller) {
+    min-height: 16rem;
+  }
+</style>

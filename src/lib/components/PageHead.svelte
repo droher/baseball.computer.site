@@ -8,8 +8,10 @@
   const SITE_ORIGIN = "https://baseball.computer";
   let formattedTitle = $derived(title ? `${title} | ${siteTitle}` : siteTitle);
   let origin = $derived(page.url?.origin ?? SITE_ORIGIN);
-  let absoluteLogo = $derived(`${origin}${logo}`);
-  let absoluteUrl = $derived(`${origin}${page.url?.pathname ?? "/"}`);
+  let absoluteLogo = $derived(new URL(logo, origin).toString());
+  let absoluteUrl = $derived(
+    new URL(page.url?.pathname ?? "/", origin).toString()
+  );
 </script>
 
 <svelte:head>
