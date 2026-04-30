@@ -8,6 +8,7 @@
   import DataAnalysis from "$lib/components/data/DataAnalysis.svelte";
   import Rube from "$lib/components/data/Rube.svelte";
   import PageHead from "$lib/components/PageHead.svelte";
+  import { EXAMPLE_QUERY } from "$lib/components/data/example-query";
   import { getDbState, QueryStatus } from "$lib/state/db.svelte";
   import { encodeQuery, decodeQuery } from "$lib/util/query-url";
   import { downloadResult } from "$lib/util/download";
@@ -22,7 +23,7 @@
     ? decodeQuery(page.url.searchParams.get("query"))
     : "";
   let query: string | undefined = $state(initial || undefined);
-  let text = $state(initial);
+  let text = $state(initial || EXAMPLE_QUERY);
   let downloading = $state<"csv" | "parquet" | null>(null);
   let runQuery: ((q: string) => Promise<void>) | undefined = $state();
 
