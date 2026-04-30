@@ -10,6 +10,7 @@
 
   import { getDbState } from "$lib/state/db.svelte";
   import { getPerspectiveState } from "$lib/state/perspective.svelte";
+  import { friendlyQueryError } from "$lib/util/error-message";
 
   let {
     initialQuery,
@@ -94,12 +95,9 @@
       dbState.querySucceeded(start, rows);
     } catch (err) {
       const e = err as Error;
-      const msg = e.message?.includes(
-        "Must pass at least one record batch or an explicit Schema"
-      )
-        ? "Query returned 0 rows."
-        : e.message;
-      dbState.queryFailed(start, new Error(msg));
+      const friendly = new Error(friendlyQueryError(e.message ?? String(e)));
+      friendly.name = e.name;
+      dbState.queryFailed(start, friendly);
     }
   }
 

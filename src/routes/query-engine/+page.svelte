@@ -12,6 +12,7 @@
   import { getDbState, QueryStatus } from "$lib/state/db.svelte";
   import { encodeQuery, decodeQuery } from "$lib/util/query-url";
   import { downloadResult } from "$lib/util/download";
+  import { friendlyQueryError } from "$lib/util/error-message";
   import type { PageData } from "./$types";
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
@@ -54,7 +55,7 @@
       await downloadResult(dbState, trimmed, format);
     } catch (err) {
       const e = err as Error;
-      dbState.error = e.message;
+      dbState.error = friendlyQueryError(e.message ?? String(e));
     } finally {
       downloading = null;
     }
