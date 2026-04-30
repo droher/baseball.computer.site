@@ -5,7 +5,7 @@
   import logo from "$lib/assets/logo-192.png";
 
   // Warm up db connection
-  onMount(async () => {
+  onMount(() => {
     db.subscribe(() => {});
   });
 </script>
@@ -22,7 +22,9 @@
       </h1>
       <img class="hero-content h-64" src={logo} alt="baseball.computer logo" />
       <h2 class="text-2xl font-title">A historical database</h2>
-      <div class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+      <div
+        class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0"
+      >
         <a class="btn btn-primary" href="/query-engine">Query Now</a>
         <a class="btn btn-info" href="https://docs.baseball.computer"
           >Read the Docs</a
@@ -39,7 +41,6 @@
         >
       </div>
     </div>
-    <!-- Database Purpose -->
     <section class="mb-10">
       <h2 class="text-3xl prose mb-4 font-bold">About The Project</h2>
       <p class="text-lg">
@@ -71,13 +72,13 @@
         and only requires the following attribution:
       </p>
       <div class="prose">
-      <blockquote>
-        <p>
-          The information used here was obtained free of charge from and is
-          copyrighted by Retrosheet. Interested parties may contact Retrosheet
-          at "www.retrosheet.org".
-        </p>
-      </blockquote>
+        <blockquote>
+          <p>
+            The information used here was obtained free of charge from and is
+            copyrighted by Retrosheet. Interested parties may contact Retrosheet
+            at "www.retrosheet.org".
+          </p>
+        </blockquote>
       </div>
 
       For player statistics prior to 1901, the database relies on
@@ -91,11 +92,12 @@
       >.
     </section>
 
-    <!-- Contact Information -->
     <section>
       <h2 class="text-3xl mb-4 font-bold">About Me</h2>
-      <p>I am a data engineer living in New York. 
-        If you have any questions or suggestions, feel free to reach out:</p>
+      <p>
+        I am a data engineer living in New York. If you have any questions or
+        suggestions, feel free to reach out:
+      </p>
       <a href="mailto:david.roher@baseball.computer" class="link"
         >david.roher@baseball.computer</a
       >

@@ -4,22 +4,25 @@
   import "@finos/perspective-viewer/dist/css/pro-dark.css";
 
   import { onMount } from "svelte";
-  import perspective, { type PerspectiveWorker } from "@finos/perspective";
-  import type { IPerspectiveViewerElement } from "@finos/perspective-viewer";
+  import perspective from "@finos/perspective";
+  import type { Client, Table as PspTable } from "@finos/perspective";
+  import type { HTMLPerspectiveViewerElement } from "@finos/perspective-viewer";
+  import SERVER_WASM from "@finos/perspective/dist/wasm/perspective-server.wasm?url";
+  import CLIENT_WASM from "@finos/perspective-viewer/dist/wasm/perspective-viewer.wasm?url";
   import { Table, tableToIPC } from "apache-arrow";
 
   import { QueryStatus, queryStatus, db } from "$lib/stores";
 
-  export let query: string;
+  let { query }: { query: string | undefined } = $props();
 
-  let viewer1: IPerspectiveViewerElement;
-  let worker: PerspectiveWorker;
-  let hidden = true;
-  let error_message: string = "";
+  let viewer1: HTMLPerspectiveViewerElement;
+  let client: Client | undefined = $state();
+  let hidden = $state(true);
+  let error_message = $state("");
 
-  $: {
-    if (query && $queryStatus === QueryStatus.Ready) {
-      getTable()
+  $effect(() => {
+    if (query && $queryStatus === QueryStatus.Ready && client) {
+      runQuery(client, query)
         .catch((e: Error) => {
           if (
             e.message.includes(
@@ -35,80 +38,78 @@
           queryStatus.set(QueryStatus.Idle);
         });
     }
-  }
+  });
 
-  const getTable = async () => {
-    // TODO: Investigate why buffer length > 1 seems to cause random ints
-    // to appear in null int values
+  const runQuery = async (c: Client, q: string) => {
+    // TODO: BUFFER_LENGTH > 1 causes spurious ints in null int columns
     const BUFFER_LENGTH = 1;
 
     queryStatus.set(QueryStatus.Running);
     error_message = "";
 
-    let pTable;
-    let batch_buffer = [];
+    let pTable: PspTable | undefined;
+    let batch_buffer: import("apache-arrow").RecordBatch[] = [];
     const conn =
       $db ??
       (() => {
         throw new Error("No database connection");
       })();
 
-    for await (const { batch, done } of conn.getBatches(query)) {
+    for await (const { batch, done } of conn.getBatches(q)) {
       batch_buffer.push(batch);
       if (batch_buffer.length >= BUFFER_LENGTH || done) {
-        var arrowTable = new Table(batch_buffer);
+        const arrowTable = new Table(batch_buffer);
         batch_buffer = [];
-        var ipc = tableToIPC(arrowTable, "file");
-        if (typeof pTable === "undefined") {
-          pTable = await worker.table(ipc.buffer);
-          await viewer1.load(pTable);
+        const ipc = tableToIPC(arrowTable, "file");
+        const buf = ipc.buffer.slice(
+          ipc.byteOffset,
+          ipc.byteOffset + ipc.byteLength
+        ) as ArrayBuffer;
+        if (pTable === undefined) {
+          pTable = await c.table(buf);
+          await viewer1.load(Promise.resolve(pTable));
         } else {
-          pTable.update(ipc.buffer);
+          await pTable.update(buf);
         }
       }
     }
-    queryStatus.set(QueryStatus.Success);
-    queryStatus.set(QueryStatus.Idle);
     hidden = false;
 
     return pTable;
   };
 
   onMount(async () => {
-    await import("@finos/perspective-viewer");
+    // Headless browsers (Playwright Firefox) may report navigator.languages
+    // as ["undefined"] or [], which perspective's wasm feeds to
+    // Intl.NumberFormat and throws "invalid language tag".
+    const valid = (l: unknown): l is string =>
+      typeof l === "string" && l.length > 0 && l !== "undefined";
+    const langs = (navigator.languages ?? []).filter(valid);
+    if (langs.length === 0) {
+      Object.defineProperty(navigator, "languages", {
+        value: [valid(navigator.language) ? navigator.language : "en-US"],
+        configurable: true,
+      });
+    }
+
+    const perspective_viewer = (await import("@finos/perspective-viewer"))
+      .default;
     await import("@finos/perspective-viewer-d3fc");
     await import("@finos/perspective-viewer-datagrid");
 
-    const workerSettings = {
-      types: {
-        integer: {
-          format: {
-            useGrouping: false,
-          },
-        },
-        float: {
-          format: {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 3,
-          },
-        },
-        date: {
-          format: {
-            dateStyle: undefined,
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-          },
-        },
-      },
-    };
+    perspective.init_server(fetch(SERVER_WASM));
+    perspective_viewer.init_client(fetch(CLIENT_WASM));
 
-    // @ts-ignore (this seems to be where formatting needs to get passed)
-    worker = perspective.shared_worker(workerSettings);
+    client = await perspective.worker();
   });
 </script>
 
 {#if error_message}
   <div class="alert alert-error">{error_message}</div>
 {/if}
-<perspective-viewer {hidden} bind:this={viewer1} class="grow min-h-[50vh]" />
+<perspective-viewer
+  {hidden}
+  bind:this={viewer1}
+  class="grow min-h-[50vh]"
+  locale="en-US"
+></perspective-viewer>

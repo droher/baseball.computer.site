@@ -30,11 +30,8 @@
     </div>
 
     <!-- Logo -->
-    <a
-      class="btn btn-ghost gap-2 text-xl normal-case"
-      href="/"
-    >
-      <img src="{logo}" alt="baseball.computer logo" class="h-12 p" />
+    <a class="btn btn-ghost gap-2 text-xl normal-case" href="/">
+      <img src={logo} alt="baseball.computer logo" class="h-12 p" />
       <span class="hidden lg:inline font-play">baseball.computer</span>
     </a>
   </div>

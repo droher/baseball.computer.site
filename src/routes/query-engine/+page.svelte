@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import QueryInput from "$lib/components/data/QueryInput.svelte";
   import DataAnalysis from "$lib/components/data/DataAnalysis.svelte";
@@ -13,27 +13,24 @@
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
 
-  let query: string | undefined;
-  let text: string | undefined;
+  let { data }: { data: PageData } = $props();
 
-  export let data: PageData;
+  let query: string | undefined = $state();
+  let text = $state("");
 
-  let showRube = false;
-  $: {
-    showRube =
-      rubeStrings.some((substring) =>
-        query?.toLowerCase().includes(substring)
-      ) && $queryStatus === QueryStatus.Running;
-  }
+  let showRube = $derived(
+    rubeStrings.some((substring) => query?.toLowerCase().includes(substring)) &&
+      $queryStatus === QueryStatus.Running
+  );
 
   const handleQuery = () => {
     query = text;
     $queryStatus = QueryStatus.Ready;
-    $page.url.searchParams.set(
+    page.url.searchParams.set(
       "query",
       encodeURIComponent(btoa(query?.trim() || ""))
     );
-    goto($page.url.toString());
+    goto(page.url.toString());
   };
 
   onMount(() => {
@@ -41,9 +38,9 @@
     db.subscribe(() => {});
 
     query =
-      atob(decodeURIComponent($page.url.searchParams.get("query") || "")) ||
+      atob(decodeURIComponent(page.url.searchParams.get("query") || "")) ||
       undefined;
-    text = query;
+    text = query ?? "";
   });
 </script>
 
@@ -54,7 +51,7 @@
 <main class="grow flex flex-col">
   <QueryInput schema={data.schema} bind:value={text} />
   <div class="flex flex-row flex-wrap space-x-2 m-2">
-    <button on:click={handleQuery} class="btn btn-primary flex-auto">
+    <button onclick={handleQuery} class="btn btn-primary flex-auto">
       {#if $queryStatus === QueryStatus.Running}
         <span class="animate-pulse">Running...</span>
       {:else}

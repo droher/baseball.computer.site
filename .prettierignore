@@ -1,0 +1,15 @@
+build/
+.svelte-kit/
+dist/
+node_modules/
+.vercel/
+.claude/
+.playwright-mcp/
+test-results/
+playwright-report/
+CLAUDE.md
+src/posts/
+static/favicon/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

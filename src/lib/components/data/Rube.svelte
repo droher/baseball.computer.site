@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { tweened } from "svelte/motion";
+  import { Tween } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { onMount } from "svelte";
 
-  let hidden = "";
+  let hidden = $state("");
 
-  const stickFigureX = tweened(-100, { duration: 10000, easing: cubicOut });
-  const firetruckX = tweened(0, { duration: 10000, easing: cubicOut });
+  const stickFigureX = new Tween(-100, { duration: 10000, easing: cubicOut });
+  const firetruckX = new Tween(0, { duration: 10000, easing: cubicOut });
 
-  stickFigureX.set(300);
-  firetruckX.set(150);
+  stickFigureX.target = 300;
+  firetruckX.target = 150;
 
   onMount(() => {
     setTimeout(() => {
@@ -19,7 +19,7 @@
 </script>
 
 <div class="flex justify-start items-top {hidden}">
-  <div style="transform: translateX({$stickFigureX}%)">
+  <div style="transform: translateX({stickFigureX.current}%)">
     <img
       src="stick_figure_transparent.png"
       alt="Rube Waddell"
@@ -27,7 +27,7 @@
     />
   </div>
 
-  <div class="ml-20" style="transform: translateX({$firetruckX}%)">
+  <div class="ml-20" style="transform: translateX({firetruckX.current}%)">
     <img
       src="firetruck_transparent.png"
       alt="Firetruck"

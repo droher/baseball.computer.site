@@ -1,12 +1,13 @@
 <script lang="ts">
-  export let author: string;
-  export let date: string;
+  let { author, date }: { author: string; date: string } = $props();
 
-  const formattedDate = new Date(date).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  let formattedDate = $derived(
+    new Date(date).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  );
 </script>
 
 <p class="mb-4 text-sm text-gray-700">

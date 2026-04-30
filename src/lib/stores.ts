@@ -18,5 +18,5 @@ export const db = writable<DbContextManager | null>(null, (set) => {
   };
   if (browser) {
     startDb();
-  };
+  }
 });

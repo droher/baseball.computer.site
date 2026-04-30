@@ -1,8 +1,8 @@
 <script lang="ts">
-  export let description: string;
-  export let slug = "";
+  let { description, slug = "" }: { description: string; slug?: string } =
+    $props();
 
-  const href = slug && `/blog/${slug}`;
+  const href = $derived(slug && `/blog/${slug}`);
 </script>
 
 <div class="mb-8">

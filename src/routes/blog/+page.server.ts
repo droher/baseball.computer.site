@@ -2,8 +2,8 @@ import { getPublishedPosts } from "$lib/blog/util";
 
 const MAX_POSTS = 10;
 
-export const load = async ({ url }) => {
-  let posts = await getPublishedPosts();
+export const load = async () => {
+  const posts = await getPublishedPosts();
 
   posts
     .slice(0, MAX_POSTS)
