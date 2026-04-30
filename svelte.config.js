@@ -15,6 +15,9 @@ const config = {
 
   kit: {
     adapter: adapter({ runtime: "nodejs22.x" }),
+    prerender: {
+      origin: "https://baseball.computer",
+    },
   },
 };
 

@@ -1,12 +1,26 @@
 <script lang="ts">
   import PageHead from "$lib/components/PageHead.svelte";
-  import { db } from "$lib/stores";
+  import { getDbState } from "$lib/state/db.svelte";
   import { onMount } from "svelte";
   import logo from "$lib/assets/logo-192.png";
+  import duckDBWorkerEh from "@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url";
+  import duckDBWasmEh from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url";
 
-  // Warm up db connection
+  const dbState = getDbState();
+
+  const prefetch = (href: string, asType: "fetch" | "script") => {
+    const l = document.createElement("link");
+    l.rel = "prefetch";
+    l.as = asType;
+    if (asType === "fetch") l.crossOrigin = "anonymous";
+    l.href = href;
+    document.head.appendChild(l);
+  };
+
   onMount(() => {
-    db.subscribe(() => {});
+    prefetch(duckDBWasmEh, "fetch");
+    prefetch(duckDBWorkerEh, "script");
+    void dbState.init();
   });
 </script>
 

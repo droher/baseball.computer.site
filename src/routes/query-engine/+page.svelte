@@ -1,46 +1,66 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { page } from "$app/state";
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
 
   import QueryInput from "$lib/components/data/QueryInput.svelte";
   import DataAnalysis from "$lib/components/data/DataAnalysis.svelte";
-  import { QueryStatus, queryStatus } from "$lib/stores";
   import Rube from "$lib/components/data/Rube.svelte";
-  import { goto } from "$app/navigation";
-  import { onMount } from "svelte";
-  import { db } from "$lib/stores";
-  import type { PageData } from "./$types";
   import PageHead from "$lib/components/PageHead.svelte";
+  import { getDbState, QueryStatus } from "$lib/state/db.svelte";
+  import { encodeQuery, decodeQuery } from "$lib/util/query-url";
+  import { downloadResult } from "$lib/util/download";
+  import type { PageData } from "./$types";
 
   const rubeStrings = ["rube", "waddell", "waddr101"];
+  const dbState = getDbState();
 
   let { data }: { data: PageData } = $props();
 
-  let query: string | undefined = $state();
-  let text = $state("");
+  const initial = browser
+    ? decodeQuery(page.url.searchParams.get("query"))
+    : "";
+  let query: string | undefined = $state(initial || undefined);
+  let text = $state(initial);
+  let downloading = $state<"csv" | "parquet" | null>(null);
+  let runQuery: ((q: string) => Promise<void>) | undefined = $state();
 
+  let isRunning = $derived(dbState.status === QueryStatus.Running);
   let showRube = $derived(
-    rubeStrings.some((substring) => query?.toLowerCase().includes(substring)) &&
-      $queryStatus === QueryStatus.Running
+    rubeStrings.some((s) => query?.toLowerCase().includes(s)) && isRunning
   );
 
-  const handleQuery = () => {
-    query = text;
-    $queryStatus = QueryStatus.Ready;
-    page.url.searchParams.set(
-      "query",
-      encodeURIComponent(btoa(query?.trim() || ""))
-    );
-    goto(page.url.toString());
+  const handleQuery = async () => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    query = trimmed;
+    page.url.searchParams.set("query", encodeQuery(trimmed));
+    void goto(page.url.toString(), {
+      replaceState: true,
+      keepFocus: true,
+      noScroll: true,
+    });
+    if (runQuery) await runQuery(trimmed);
+  };
+
+  const handleDownload = async (format: "csv" | "parquet") => {
+    const trimmed = text.trim();
+    if (!trimmed || downloading) return;
+    downloading = format;
+    dbState.error = "";
+    try {
+      await downloadResult(dbState, trimmed, format);
+    } catch (err) {
+      const e = err as Error;
+      dbState.error = e.message;
+    } finally {
+      downloading = null;
+    }
   };
 
   onMount(() => {
-    // Warm up db connection
-    db.subscribe(() => {});
-
-    query =
-      atob(decodeURIComponent(page.url.searchParams.get("query") || "")) ||
-      undefined;
-    text = query ?? "";
+    void dbState.init();
   });
 </script>
 
@@ -50,25 +70,35 @@
 />
 <main class="grow flex flex-col">
   <QueryInput schema={data.schema} bind:value={text} />
-  <div class="flex flex-row flex-wrap space-x-2 m-2">
-    <button onclick={handleQuery} class="btn btn-primary flex-auto">
-      {#if $queryStatus === QueryStatus.Running}
+  <div class="flex flex-row flex-wrap gap-2 m-2">
+    <button
+      onclick={handleQuery}
+      class="btn btn-primary flex-auto"
+      disabled={isRunning || downloading !== null || !text.trim()}
+    >
+      {#if isRunning}
         <span class="animate-pulse">Running...</span>
       {:else}
         Analyze
       {/if}
     </button>
-    <button class="btn btn-accent hidden"
-      >Download
-      <select class="select bg-white max-w-xs">
-        <option disabled selected>Format</option>
-        <option>CSV</option>
-        <option>Parquet</option>
-      </select>
+    <button
+      onclick={() => handleDownload("csv")}
+      class="btn btn-accent"
+      disabled={isRunning || downloading !== null || !text.trim()}
+    >
+      {downloading === "csv" ? "Building CSV..." : "Download CSV"}
+    </button>
+    <button
+      onclick={() => handleDownload("parquet")}
+      class="btn btn-accent"
+      disabled={isRunning || downloading !== null || !text.trim()}
+    >
+      {downloading === "parquet" ? "Building Parquet..." : "Download Parquet"}
     </button>
   </div>
   {#if showRube}
     <Rube />
   {/if}
-  <DataAnalysis {query} />
+  <DataAnalysis initialQuery={query} onReady={(fn) => (runQuery = fn)} />
 </main>

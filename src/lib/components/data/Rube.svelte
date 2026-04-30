@@ -21,7 +21,7 @@
 <div class="flex justify-start items-top {hidden}">
   <div style="transform: translateX({stickFigureX.current}%)">
     <img
-      src="stick_figure_transparent.png"
+      src="/stick_figure_transparent.png"
       alt="Rube Waddell"
       class="w-1/4 object-scale-down"
     />
@@ -29,7 +29,7 @@
 
   <div class="ml-20" style="transform: translateX({firetruckX.current}%)">
     <img
-      src="firetruck_transparent.png"
+      src="/firetruck_transparent.png"
       alt="Firetruck"
       class="w-1/4 object-scale-down"
     />

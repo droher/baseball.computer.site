@@ -1,7 +1,41 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var prefersDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : prefersDark
+                ? "dark"
+                : "light";
+          document.documentElement.setAttribute("data-theme", theme);
+          if (window.matchMedia && stored !== "light" && stored !== "dark") {
+            window
+              .matchMedia("(prefers-color-scheme: dark)")
+              .addEventListener("change", function (e) {
+                if (
+                  localStorage.getItem("theme") !== "light" &&
+                  localStorage.getItem("theme") !== "dark"
+                ) {
+                  document.documentElement.setAttribute(
+                    "data-theme",
+                    e.matches ? "dark" : "light"
+                  );
+                }
+              });
+          }
+        } catch (_) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
     <link
       rel="apple-touch-icon"
       sizes="180x180"

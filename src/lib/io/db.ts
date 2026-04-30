@@ -69,6 +69,21 @@ class DbContextManager {
       yield { batch: batch, done: Boolean(iter.done) };
     }
   }
+
+  async copyToBuffer(
+    query: string,
+    format: "csv" | "parquet"
+  ): Promise<Uint8Array> {
+    const path = `result.${format}`;
+    const fmt = format === "csv" ? "CSV, HEADER" : "PARQUET";
+    try {
+      await this.db.dropFile(path);
+    } catch {
+      // file may not exist; ignore
+    }
+    await this.conn.query(`COPY (${query}) TO '${path}' (FORMAT ${fmt})`);
+    return await this.db.copyFileToBuffer(path);
+  }
 }
 
 export { DbContextManager };
