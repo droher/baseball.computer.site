@@ -15,9 +15,13 @@
   let {
     initialQuery,
     onReady,
+    onRows,
+    onStart,
   }: {
     initialQuery: string | undefined;
     onReady?: (run: (q: string) => Promise<void>) => void;
+    onRows?: (rows: number) => void;
+    onStart?: (query: string) => void;
   } = $props();
 
   const dbState = getDbState();
@@ -54,6 +58,7 @@
     const c = await psp.getClient();
     if (myToken !== runToken) return;
 
+    onStart?.(query);
     const { start } = dbState.beforeQuery();
     let rows = 0;
     // dispose the previous table before reassigning so wasm memory is freed
@@ -92,6 +97,7 @@
         }
       }
       hidden = false;
+      onRows?.(rows);
       dbState.querySucceeded(start, rows);
     } catch (err) {
       const e = err as Error;

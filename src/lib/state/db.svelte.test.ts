@@ -56,6 +56,40 @@ describe("DbState", () => {
     );
   });
 
+  it("explain delegates to manager and returns plan text", async () => {
+    const explain = vi.fn().mockResolvedValue("PROJECTION\n  SCAN");
+    (DbContextManager.init as ReturnType<typeof vi.fn>).mockResolvedValue({
+      explain,
+    });
+    const s = new DbState();
+    const text = await s.explain("SELECT 1", false);
+    expect(explain).toHaveBeenCalledWith("SELECT 1", false);
+    expect(text).toContain("PROJECTION");
+  });
+
+  it("explain forwards analyze=true to manager", async () => {
+    const explain = vi.fn().mockResolvedValue("ok");
+    (DbContextManager.init as ReturnType<typeof vi.fn>).mockResolvedValue({
+      explain,
+    });
+    const s = new DbState();
+    await s.explain("SELECT 1", true);
+    expect(explain).toHaveBeenCalledWith("SELECT 1", true);
+  });
+
+  it("queryCancelled drops status out of Running and emits cancel event", async () => {
+    const { track } = await import("$lib/telemetry");
+    const s = new DbState();
+    s.beforeQuery();
+    expect(s.status).toBe(QueryStatus.Running);
+    s.queryCancelled(performance.now());
+    expect(s.status).toBe(QueryStatus.Idle);
+    expect(track).toHaveBeenCalledWith(
+      "query_cancelled",
+      expect.objectContaining({ ms: expect.any(Number) })
+    );
+  });
+
   it("queryFailed records error and emits fail event", async () => {
     const { track } = await import("$lib/telemetry");
     const s = new DbState();
