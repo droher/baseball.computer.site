@@ -45,6 +45,10 @@ class DbContextManager {
     await conn.query(
       `ATTACH 'https://data.baseball.computer/dbt/bc_remote.db' (READ_ONLY, TYPE DUCKDB)`
     );
+    // Writable in-memory database for local file registration. The
+    // remote attach is read-only so any CREATE VIEW for an uploaded
+    // CSV/Parquet must land here.
+    await conn.query(`ATTACH ':memory:' AS local`);
     await conn.query(`USE bc_remote`);
     await conn.query(`SET SCHEMA=main_models`);
 
@@ -54,6 +58,7 @@ class DbContextManager {
 
   async close() {
     await this.conn.query(`DETACH bc_remote`);
+    await this.conn.query(`DETACH local`);
     await this.conn.close();
     await this.db.terminate();
   }
@@ -67,6 +72,69 @@ class DbContextManager {
       const batch = iter.value;
       iter = await reader.next();
       yield { batch: batch, done: Boolean(iter.done) };
+    }
+  }
+
+  async explain(query: string, analyze = false): Promise<string> {
+    const sql = `EXPLAIN ${analyze ? "ANALYZE " : ""}${query}`;
+    const reader = await this.conn.query(sql);
+    // DuckDB EXPLAIN returns columns (explain_key, explain_value).
+    // The plan tree is the explain_value cells joined by newline.
+    const rows = reader.toArray() as Array<{ explain_value?: unknown }>;
+    return rows
+      .map((r) => (typeof r.explain_value === "string" ? r.explain_value : ""))
+      .join("\n");
+  }
+
+  async registerFile(
+    file: File,
+    tableName: string
+  ): Promise<{ columns: Array<string> }> {
+    const buf = new Uint8Array(await file.arrayBuffer());
+    await this.db.registerFileBuffer(file.name, buf);
+    // DuckDB-WASM auto-detects csv/parquet by filename extension when
+    // the path is referenced as a string literal in SELECT FROM '...'.
+    const escapedFile = file.name.replace(/'/g, "''");
+    const escapedTable = tableName.replace(/"/g, '""');
+    try {
+      await this.conn.query(
+        `CREATE OR REPLACE VIEW local.main."${escapedTable}" AS SELECT * FROM '${escapedFile}'`
+      );
+      const reader = await this.conn.query(
+        `DESCRIBE local.main."${escapedTable}"`
+      );
+      const rows = reader.toArray() as Array<{ column_name?: unknown }>;
+      const columns = rows
+        .map((r) => (typeof r.column_name === "string" ? r.column_name : ""))
+        .filter(Boolean);
+      return { columns };
+    } catch (err) {
+      // CREATE VIEW or DESCRIBE failed (malformed file, parse error).
+      // The file buffer is still in the worker vfs — drop it to avoid
+      // leaking bytes per failed attempt. Best-effort: any failure
+      // here is secondary to the original error we re-throw.
+      try {
+        await this.db.dropFile(file.name);
+      } catch {
+        // ignore
+      }
+      throw err;
+    }
+  }
+
+  async unregisterFile(filename: string, tableName: string): Promise<void> {
+    const escapedTable = tableName.replace(/"/g, '""');
+    try {
+      await this.conn.query(`DROP VIEW IF EXISTS local.main."${escapedTable}"`);
+    } catch (err) {
+      // View may already be gone; tolerate but surface in dev so we
+      // notice if DuckDB ever changes IF EXISTS semantics.
+      if (dev) console.warn("unregisterFile: drop view failed", err);
+    }
+    try {
+      await this.db.dropFile(filename);
+    } catch (err) {
+      if (dev) console.warn("unregisterFile: drop file failed", err);
     }
   }
 

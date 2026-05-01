@@ -4,6 +4,7 @@
   import Navbar from "$lib/components/app/Nav.svelte";
   import Footer from "$lib/components/app/Footer.svelte";
   import { DbState, setDbState } from "$lib/state/db.svelte";
+  import { HistoryState, setHistoryState } from "$lib/state/history.svelte";
   import {
     PerspectiveState,
     setPerspectiveState,
@@ -11,6 +12,7 @@
 
   setDbState(new DbState());
   setPerspectiveState(new PerspectiveState());
+  setHistoryState(new HistoryState());
 
   let { children } = $props();
 </script>

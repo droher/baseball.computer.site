@@ -46,6 +46,11 @@ export class DbState {
     return m.copyToBuffer(query, format);
   }
 
+  async explain(query: string, analyze = false): Promise<string> {
+    const m = await this.init();
+    return m.explain(query, analyze);
+  }
+
   beforeQuery(): { start: number } {
     this.status = QueryStatus.Running;
     this.error = "";
@@ -72,6 +77,11 @@ export class DbState {
   }
 
   queryCancelled(start: number): void {
+    // Move out of Running so the page-level history $effect can
+    // finalize the entry as cancelled. Idle is the right terminal
+    // state for "cancelled before completion" since neither
+    // Success nor Failure applies.
+    this.status = QueryStatus.Idle;
     track("query_cancelled", {
       ms: Math.round(performance.now() - start),
     });

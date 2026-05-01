@@ -16,6 +16,8 @@
   },
   "devDependencies": {
     "@codemirror/lang-sql": "^6.8.0",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/view": "^6.41.1",
     "@eslint/js": "^10.0.1",
     "@fontsource/roboto-mono": "^5.1.1",
     "@playwright/test": "^1.49.0",
