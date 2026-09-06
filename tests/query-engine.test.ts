@@ -1,5 +1,16 @@
 import { expect, test } from "@playwright/test";
 import fs from "node:fs/promises";
+import { DUCKLAKE_CATALOG_URL } from "../src/lib/io/data-source";
+
+test.beforeEach(async ({ context }) => {
+  const catalogURL = process.env.PLAYWRIGHT_DUCKLAKE_CATALOG_URL;
+  if (catalogURL) {
+    await context.route(DUCKLAKE_CATALOG_URL, async (route) => {
+      const response = await route.fetch({ url: catalogURL });
+      await route.fulfill({ response });
+    });
+  }
+});
 
 const SELECT_1_BASE64 = encodeURIComponent(btoa("SELECT 1 AS a"));
 
@@ -15,6 +26,7 @@ test("query engine runs SELECT 1 and reveals the viewer", async ({ page }) => {
       const v = document.querySelector("perspective-viewer");
       return v !== null && !v.hasAttribute("hidden");
     },
+    undefined,
     { timeout: 30_000 }
   );
   await expect(page.locator(".alert-error")).toHaveCount(0);
@@ -24,6 +36,9 @@ test("query engine runs SELECT 1 and reveals the viewer", async ({ page }) => {
 test("query engine downloads CSV", async ({ page }) => {
   await page.goto(`/query-engine?query=${SELECT_1_BASE64}`);
   // wait for db init implicitly by clicking Analyze first to warm things
+  await expect(page.locator("perspective-viewer")).toBeVisible({
+    timeout: 120_000,
+  });
   const downloadPromise = page.waitForEvent("download", { timeout: 60_000 });
   await page.getByRole("button", { name: /^Download CSV$/ }).click();
   const download = await downloadPromise;
@@ -65,6 +80,7 @@ test("history records a successful query", async ({ page }) => {
       const v = document.querySelector("perspective-viewer");
       return v !== null && !v.hasAttribute("hidden");
     },
+    undefined,
     { timeout: 30_000 }
   );
   await page.getByRole("button", { name: /Recent/ }).click();
@@ -73,7 +89,9 @@ test("history records a successful query", async ({ page }) => {
 
 test("EXPLAIN shows a plan", async ({ page }) => {
   await page.goto(`/query-engine?query=${SELECT_1_BASE64}`);
-  // wait for db init by waiting for the Analyze button to be enabled
+  await expect(page.locator("perspective-viewer")).toBeVisible({
+    timeout: 120_000,
+  });
   await expect(page.getByRole("button", { name: /^EXPLAIN$/ })).toBeEnabled();
   await page.getByRole("button", { name: /^EXPLAIN$/ }).click();
   // DuckDB plans always include "PROJECTION" for SELECT
@@ -88,9 +106,12 @@ test("local CSV registration adds a queryable table", async ({ page }) => {
 
   // Programmatic file upload via the hidden input
   const csv = "name,score\nalice,1\nbob,2\n";
-  const tmpPath = "/tmp/playwright-fixture.csv";
-  await fs.writeFile(tmpPath, csv);
-  await page.locator('input[type="file"]').setInputFiles(tmpPath);
+  await expect(page.locator(".cm-content")).toBeVisible();
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "playwright-fixture.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from(csv),
+  });
 
   // The new table should appear in the sidebar
   await expect(page.locator("text=local.playwright_fixture")).toBeVisible({
@@ -102,6 +123,9 @@ test("production catalog is a read-only DuckLake", async ({ page }) => {
   const query =
     "SELECT type, readonly FROM duckdb_databases() WHERE database_name = 'bc_remote'";
   await page.goto(`/query-engine?query=${encodeURIComponent(btoa(query))}`);
+  await expect(page.locator("perspective-viewer")).toBeVisible({
+    timeout: 120_000,
+  });
   const downloadPromise = page.waitForEvent("download", { timeout: 120_000 });
   await page.getByRole("button", { name: /^Download CSV$/ }).click();
   const download = await downloadPromise;
@@ -126,6 +150,9 @@ test("baseball query reads DuckLake parquet and exports results", async ({
   const query =
     "SELECT p.first_name, p.last_name, m.home_runs FROM metrics_player_career_offense m JOIN people p USING (player_id) WHERE m.home_runs > 0 ORDER BY m.home_runs DESC LIMIT 10";
   await page.goto(`/query-engine?query=${encodeURIComponent(btoa(query))}`);
+  await expect(page.locator("perspective-viewer")).toBeVisible({
+    timeout: 120_000,
+  });
   const downloadPromise = page.waitForEvent("download", { timeout: 120_000 });
   await page.getByRole("button", { name: /^Download CSV$/ }).click();
   const download = await downloadPromise;
@@ -144,6 +171,7 @@ test("baseball query reads DuckLake parquet and exports results", async ({
 
 test("local CSV can join a DuckLake table", async ({ page }) => {
   await page.goto(`/query-engine?query=${SELECT_1_BASE64}`);
+  await expect(page.locator(".cm-content")).toBeVisible();
   await page.locator('input[type="file"]').setInputFiles({
     name: "join_fixture.csv",
     mimeType: "text/csv",
@@ -154,7 +182,13 @@ test("local CSV can join a DuckLake table", async ({ page }) => {
   });
   const query =
     "SELECT l.label, p.player_id FROM local.main.join_fixture l JOIN (SELECT player_id, row_number() OVER (ORDER BY player_id) AS id FROM people) p USING (id)";
-  await page.locator(".cm-content").fill(query);
+  const editor = page.locator(".cm-content");
+  await editor.click();
+  await editor.press("ControlOrMeta+A");
+  await editor.pressSequentially(query);
+  await expect(page.locator("perspective-viewer")).toBeVisible({
+    timeout: 120_000,
+  });
   const downloadPromise = page.waitForEvent("download", { timeout: 120_000 });
   await page.getByRole("button", { name: /^Download CSV$/ }).click();
   const download = await downloadPromise;
