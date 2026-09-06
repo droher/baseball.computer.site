@@ -85,7 +85,12 @@
 {/if}
 
 <div role="region" aria-label="SQL query editor" class="query-editor">
-  <CodeMirror bind:value extensions={initialExtensions} onready={handleReady} />
+  <CodeMirror
+    bind:value
+    nodebounce
+    extensions={initialExtensions}
+    onready={handleReady}
+  />
 </div>
 
 <style>
