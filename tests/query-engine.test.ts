@@ -55,6 +55,7 @@ test("schema sidebar inserts qualified table name into editor", async ({
   // schema is seeded from prerendered catalog.json, so any rendered <details>
   // element under the Schema heading proves the tree mounted.
   await expect(page.getByRole("heading", { name: "Schema" })).toBeVisible();
+  await expect(page.locator(".cm-content")).toBeVisible();
   const firstSchema = page.locator(".schema-browser details").first();
   const schemaText =
     (await firstSchema.locator("summary").first().textContent())?.trim() ?? "";
