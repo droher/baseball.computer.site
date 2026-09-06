@@ -11,7 +11,7 @@ const { DbContextManager } = await import("$lib/io/db");
 
 describe("DbState", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it("init() is idempotent under concurrent calls", async () => {
@@ -33,6 +33,26 @@ describe("DbState", () => {
     await s.init();
     await s.init();
     expect(DbContextManager.init).toHaveBeenCalledTimes(1);
+  });
+
+  it("shares a failed attempt and allows a later retry", async () => {
+    const fake = { tag: "manager" };
+    (DbContextManager.init as ReturnType<typeof vi.fn>)
+      .mockRejectedValueOnce(new Error("catalog unavailable"))
+      .mockResolvedValueOnce(fake);
+    const s = new DbState();
+    const first = s.init();
+    const concurrent = s.init();
+
+    expect(first).toBe(concurrent);
+    await expect(first).rejects.toThrow("catalog unavailable");
+    await expect(concurrent).rejects.toThrow("catalog unavailable");
+    expect(DbContextManager.init).toHaveBeenCalledTimes(1);
+    expect(s.manager).toBeNull();
+
+    await expect(s.init()).resolves.toBe(fake);
+    expect(DbContextManager.init).toHaveBeenCalledTimes(2);
+    expect(s.manager).toBe(fake);
   });
 
   it("beforeQuery sets Running and emits start event", async () => {

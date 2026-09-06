@@ -53,7 +53,7 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@duckdb/duckdb-wasm": "^1.33.1-dev45.0",
+    "@duckdb/duckdb-wasm": "1.33.1-dev57.0",
     "@finos/perspective": "^3.8.0",
     "@finos/perspective-viewer": "^3.8.0",
     "@finos/perspective-viewer-d3fc": "^3.8.0",
@@ -65,5 +65,6 @@
     "overrides": {
       "apache-arrow": "^21.1.0"
     }
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

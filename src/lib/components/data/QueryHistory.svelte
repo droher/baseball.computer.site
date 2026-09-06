@@ -52,7 +52,7 @@
   };
 </script>
 
-<div class="dropdown dropdown-end">
+<div class="dropdown dropdown-end" class:dropdown-open={open}>
   <button
     type="button"
     class="btn btn-ghost"
