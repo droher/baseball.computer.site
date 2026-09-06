@@ -10,14 +10,19 @@ describe("friendlyQueryError", () => {
     ).toBe("Query returned 0 rows.");
   });
 
-  it("maps XMLHttpRequest network errors to a CORS-aware message", () => {
+  it("maps DuckLake data request failures to an actionable message", () => {
     const raw =
-      "NetworkError: Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'https://data.baseball.computer/dbt/x.parquet'.";
-    expect(friendlyQueryError(raw)).toContain("CORS");
+      "NetworkError: Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'https://data.baseball.computer/baseball/v1/x.parquet'.";
+    const message = friendlyQueryError(raw);
+    expect(message).toContain("DuckLake");
+    expect(message).toContain("try again");
+    expect(message).not.toContain("/dbt/");
   });
 
   it("maps fetch failures", () => {
-    expect(friendlyQueryError("TypeError: Failed to fetch")).toContain("CORS");
+    expect(friendlyQueryError("TypeError: Failed to fetch")).toContain(
+      "temporarily unavailable"
+    );
   });
 
   it("passes through unknown errors", () => {

@@ -23,10 +23,15 @@ export class DbState {
       return Promise.reject(new Error("DbState only initializes in browser"));
     }
     if (!this.initPromise) {
-      this.initPromise = DbContextManager.init().then((m) => {
-        this.manager = m;
-        return m;
-      });
+      this.initPromise = DbContextManager.init()
+        .then((m) => {
+          this.manager = m;
+          return m;
+        })
+        .catch((error: unknown) => {
+          this.initPromise = null;
+          throw error;
+        });
     }
     return this.initPromise;
   }

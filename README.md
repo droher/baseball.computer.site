@@ -36,3 +36,7 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Query storage
+
+Browser queries use a public DuckLake 1.0 catalog on R2. See [production operations](docs/ducklake-production.md) for publishing, live checks, and rollback.

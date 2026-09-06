@@ -13,11 +13,10 @@ export const friendlyQueryError = (raw: string): string => {
   }
   if (NETWORK_PATTERNS.some((p) => raw.includes(p))) {
     return (
-      "Network error loading data partitions. The Cloudflare R2 bucket " +
-      "serving data.baseball.computer/dbt/*.parquet does not currently " +
-      "return CORS headers, which blocks any query that materializes " +
-      "parquet rows in the browser. Tracking upstream; works in non-browser " +
-      "DuckDB clients (Python, R, CLI)."
+      "Network error initializing or querying the browser database. " +
+      "Check your connection and try again. If the problem persists, a " +
+      "required DuckLake extension, catalog, or data file may be temporarily " +
+      "unavailable."
     );
   }
   return raw;

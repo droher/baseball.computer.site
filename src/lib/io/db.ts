@@ -2,6 +2,7 @@ import type { RecordBatch } from "apache-arrow";
 import type { AsyncDuckDB, AsyncDuckDBConnection } from "@duckdb/duckdb-wasm";
 import * as duckdb from "@duckdb/duckdb-wasm";
 import { dev } from "$app/environment";
+import { DUCKLAKE_CATALOG_URL } from "./data-source";
 
 import duckDBWorker from "@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url";
 import duckDBWasm from "@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url";
@@ -42,15 +43,19 @@ class DbContextManager {
     const db = await getDB();
 
     const conn = await db.connect();
-    await conn.query(
-      `ATTACH 'https://data.baseball.computer/dbt/bc_remote.db' (READ_ONLY, TYPE DUCKDB)`
-    );
-    // Writable in-memory database for local file registration. The
-    // remote attach is read-only so any CREATE VIEW for an uploaded
-    // CSV/Parquet must land here.
-    await conn.query(`ATTACH ':memory:' AS local`);
-    await conn.query(`USE bc_remote`);
-    await conn.query(`SET SCHEMA=main_models`);
+    try {
+      await conn.query("INSTALL ducklake");
+      await conn.query("LOAD ducklake");
+      await conn.query(
+        `ATTACH 'ducklake:${DUCKLAKE_CATALOG_URL}' AS bc_remote (READ_ONLY)`
+      );
+      await conn.query(`ATTACH ':memory:' AS local`);
+      await conn.query(`USE bc_remote`);
+      await conn.query(`SET SCHEMA=main_models`);
+    } catch (error) {
+      await db.terminate();
+      throw error;
+    }
 
     if (dev) console.debug("DB is ready for queries.");
     return new DbContextManager(db, conn);
